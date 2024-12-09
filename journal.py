@@ -1,19 +1,37 @@
 import json
 import pyttsx3
+import time
 from colorama import Fore
-from animations import slow_print
-from utilities import frame_effect  # Ensure it's imported
+from animations import slow_print, glitch_line
+from utilities import frame_effect
+
 
 class Journal:
-    """Handles the player's journal system."""
+    """Handles the player's journal system with histories."""
 
-    JOURNAL_FILE = "journal_entries.json"
+    JOURNAL_FILE = "journal.json"
 
     def __init__(self):
         self.entries = self.load_entries()
         self.tts_engine = pyttsx3.init()
-        self.tts_engine.setProperty('rate', 150)  # Set speech speed
-        self.tts_engine.setProperty('voice', 'pl')  # Set voice to Polish
+        self.configure_tts()
+
+    def configure_tts(self):
+        """Configures the TTS engine."""
+        voices = self.tts_engine.getProperty('voices')
+        for voice in voices:
+            if 'robot' in voice.name.lower() or 'male' in voice.name.lower():
+                self.tts_engine.setProperty('voice', voice.id)
+                break
+        else:
+            self.tts_engine.setProperty('voice', voices[0].id)  # Fallback to first available voice
+        self.tts_engine.setProperty('rate', 140)  # Adjust speed
+        self.tts_engine.setProperty('volume', 0.9)  # Set volume to 90%
+
+    def speak_text(self, text):
+        """Reads the text aloud using TTS."""
+        self.tts_engine.say(text)
+        self.tts_engine.runAndWait()
 
     def journal_menu(self):
         """Displays the journal menu."""
@@ -21,65 +39,89 @@ class Journal:
             frame_effect(" Journal Menu ", width=60)
             slow_print(" 1. View Entries ")
             slow_print(" 2. Add Entry ")
-            slow_print(" 3. Read Entry Aloud ")
-            slow_print(" 4. Return to Main Menu ")
+            slow_print(" 3. Return to Main Menu ")
             choice = input(Fore.GREEN + "> ").strip()
             if choice == "1":
                 self.view_entries()
             elif choice == "2":
                 self.add_entry()
             elif choice == "3":
-                self.read_entry_aloud()
-            elif choice == "4":
                 break
             else:
+                self.speak_text("Invalid choice. Please try again.")
                 slow_print(Fore.RED + "Invalid choice. Please try again.")
 
     def load_entries(self):
-        """Loads journal entries from a file."""
+        """Loads journal entries from the JSON file."""
         try:
-            with open(self.JOURNAL_FILE, "r") as file:
+            with open(self.JOURNAL_FILE, "r", encoding="utf-8") as file:
                 return json.load(file)
         except FileNotFoundError:
-            return {}  # No entries yet
+            return {"histories": []}
         except json.JSONDecodeError:
-            slow_print(Fore.RED + "[ERROR] Failed to load journal file.")
-            return {}
+            self.speak_text("Failed to load the journal file.")
+            slow_print(Fore.RED + "[ERROR] Failed to load the journal file.")
+            return {"histories": []}
 
     def save_entries(self):
-        """Saves journal entries to a file."""
+        """Saves journal entries to the JSON file."""
         try:
-            with open(self.JOURNAL_FILE, "w") as file:
+            with open(self.JOURNAL_FILE, "w", encoding="utf-8") as file:
                 json.dump(self.entries, file, indent=4)
         except Exception as e:
-            slow_print(Fore.RED + f"[ERROR] Could not save journal: {e}")
+            self.speak_text("Could not save the journal.")
+            slow_print(Fore.RED + f"[ERROR] Could not save the journal: {e}")
 
     def add_entry(self):
         """Adds a new entry to the journal."""
         title = input("Entry title: ").strip()
-        content = input("Entry content: ").strip()
-        self.entries[title] = content
+        summary = input("Entry summary: ").strip()
+        date = input("Entry date (YYYY-MM-DD): ").strip()
+        location = input("Entry location: ").strip()
+        persons = input("Persons involved (comma separated): ").split(",")
+        category = input("Category of entry: ").strip()
+
+        entry = {
+            "title": title,
+            "summary": summary,
+            "date": date,
+            "location": location,
+            "persons": [person.strip() for person in persons],
+            "category": category
+        }
+
+        self.entries["histories"].append(entry)
         self.save_entries()
+        self.speak_text(f"Entry '{title}' has been added to the journal.")
         slow_print(Fore.GREEN + f"Entry '{title}' added to the journal.")
 
     def view_entries(self):
         """Displays all entries in the journal."""
-        if not self.entries:
+        if not self.entries["histories"]:
+            self.speak_text("Dziennik jest pusty")
             slow_print(Fore.YELLOW + "The journal is empty.")
             return
-        slow_print("Journal Entries:")
-        for title, content in self.entries.items():
-            slow_print(Fore.CYAN + f"\nTitle: {title}\n" + Fore.WHITE + content)
 
-    def read_entry_aloud(self):
-        """Reads journal entries aloud using TTS."""
-        if not self.entries:
-            slow_print(Fore.YELLOW + "The journal is empty.")
-            return
-        self.view_entries()
-        title = input("Enter the title of the entry to read aloud: ").strip()
-        if title in self.entries:
-            self.tts_engine.say(self.entries[title])
-            self.tts_engine.runAndWait()
-        else:
-            slow_print(Fore.RED + f"No entry found with title '{title}'.")
+        self.speak_text("Wyświetlanie wpisów")
+        slow_print("Journal Entries (Titles):")
+        for idx, entry in enumerate(self.entries["histories"], 1):
+            self.speak_text(entry['title'])
+            slow_print(Fore.CYAN + f"{idx}. {entry['title']}")
+
+        try:
+            entry_number = int(input("\nEnter the number of the entry to view or 0 to return: ").strip())
+            if entry_number == 0:
+                return
+            if 1 <= entry_number <= len(self.entries["histories"]):
+                entry = self.entries["histories"][entry_number - 1]
+                self.speak_text(f"Title: {entry['title']}, Date: {entry['date']}, Location: {entry['location']}, Summary: {entry['summary']}.")
+                slow_print(Fore.CYAN + f"\nTitle: {entry['title']}\n" +
+                           f"Date: {entry['date']}\nLocation: {entry['location']}\n" +
+                           f"Category: {entry['category']}\n" +
+                           Fore.WHITE + f"Summary: {entry['summary']}\n")
+            else:
+                self.speak_text("Niewłaściwy numer wpisu.")
+                slow_print(Fore.RED + "Invalid entry number.")
+        except ValueError:
+            self.speak_text("Niewłaściwy parametr wejścia. Wpisz poprawny numer.")
+            slow_print(Fore.RED + "Invalid input. Please enter a valid number.")

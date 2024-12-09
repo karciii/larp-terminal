@@ -12,15 +12,16 @@ from journal import Journal
 class BootSequence:
     @staticmethod
     def run():
-        slow_print("[ SYSTEM BOOT INITIATED... ]\n")
-        loading_animation(" Loading Core Modules ")
-        slow_print("\n[ CORE MODULES LOADED ]\n")
-        matrix_rain(duration=3)
-        slow_print("\n[ Initializing Security Protocols... ]\n")
-        flickering_status_line(" Authentication System ")
-        slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
-        slow_print("-" * 60)
-        slow_print(generate_footer())
+        # slow_print("[ SYSTEM BOOT INITIATED... ]\n")
+        # loading_animation(" Loading Core Modules ")
+        # slow_print("\n[ CORE MODULES LOADED ]\n")
+        # matrix_rain(duration=3)
+        # slow_print("\n[ Initializing Security Protocols... ]\n")
+        # flickering_status_line(" Authentication System ")
+        # slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
+        # slow_print("-" * 60)
+        # slow_print(generate_footer())
+        pass
 
 class trCommands:
     @staticmethod
@@ -88,7 +89,7 @@ class tr:
     def display_logo(self):
         for line in EVIL_CORP_ASCII.splitlines():
             slow_print(Fore.RED + line, min_delay=0.001, max_delay=0.02)
-        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System ")
+        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System \n")
 
     def show_help(self):
         help_text = """

@@ -1,7 +1,7 @@
 import time
 import random
 from colorama import Fore, Back, Style
-from tqdm import tqdm  # Biblioteka do pasków postępu
+from tqdm import tqdm  # Biblioteka do paskow postepu
 from ascii_art import FOOTER_TEMPLATE
 
 
@@ -35,7 +35,7 @@ def matrix_rain(duration=5, width=100):
     """
     end_time = time.time() + duration
     while time.time() < end_time:
-        line = ''.join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") for _ in range(width))
+        line = ''.join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;':,.<>?") for _ in range(width))
         if random.random() < 0.05:  # 5% chance to add red-colored characters to simulate error
             error_position = random.randint(0, width - 1)
             line = line[:error_position] + Fore.RED + line[error_position] + Fore.GREEN + line[error_position + 1:]
@@ -82,11 +82,26 @@ def flickering_status_line(text, flicker_count=10):
     Random errors to simulate more unpredictable system failures.
     """
     error_types = [
-        "[ERROR] Connection lost.",
-        "[WARNING] Unauthorized access attempt.",
-        "[INFO] System operating normally.",
-        "[CRITICAL] Kernel panic, system failure imminent.",
-        "[INFO] Data corrupted, repair required."
+        "[ERROR] Connection lost",
+        "[WARNING] Unauthorized access attempt",
+        "[INFO] System operating normally",
+        "[CRITICAL] Kernel panic, system failure imminent",
+        "[INFO] Data corrupted, repair required",
+        "[WARNING] Unusual activity detected in the network",
+        "[ERROR] Failed to authenticate user credentials",
+        "[INFO] System updated successfully",
+        "[CRITICAL] Power supply unstable, shutting down non-essential systems",
+        "[WARNING] Disk space critically low",
+        "[ERROR] Unable to access secure partition",
+        "[INFO] Backup completed at 03:45 AM",
+        "[CRITICAL] Memory overflow, restarting processes",
+        "[WARNING] Suspicious file detected: quarantine initiated",
+        "[ERROR] Database connection timeout",
+        "[INFO] Diagnostic check completed, no errors found",
+        "[CRITICAL] Firewall breach detected, emergency protocols engaged",
+        "[WARNING] Software update delayed due to connectivity issues",
+        "[ERROR] Peripheral device malfunction",
+        "[INFO] System clock synchronized with atomic time"
     ]
     
     for _ in range(flicker_count):
@@ -118,15 +133,16 @@ def boot_sequence():
     """
     Boot sequence for the system with initial loading effects.
     """
-    slow_print("[ SYSTEM BOOT INITIATED... ]\n")
-    loading_animation("Loading Core Modules", duration=3)
-    slow_print("\n[ CORE MODULES LOADED ]\n")
-    matrix_rain(duration=3, width=100)
-    slow_print("\n[ Initializing Security Protocols... ]\n")
-    flickering_status_line("Authentication System")
-    slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
-    slow_print("-" * 60)
-    slow_print(generate_footer())
+    # slow_print("[ SYSTEM BOOT INITIATED... ]\n")
+    # loading_animation("Loading Core Modules", duration=3)
+    # slow_print("\n[ CORE MODULES LOADED ]\n")
+    # matrix_rain(duration=3, width=100)
+    # slow_print("\n[ Initializing Security Protocols... ]\n")
+    # flickering_status_line("Authentication System")
+    # slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
+    # slow_print("-" * 60)
+    # slow_print(generate_footer())
+    pass
 
 
 # Example usage for the boot sequence
