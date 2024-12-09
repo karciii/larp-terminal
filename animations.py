@@ -120,12 +120,28 @@ def generate_footer():
 
 def frame_effect(text, width=60):
     """
-    Add frame effect around text.
+    Add frame effect around text. The frame dynamically adjusts to fit the longest line of text.
     """
+    # Split the text into lines
+    lines = text.split('\n')
+    
+    # Find the maximum length of a line
+    max_line_length = max(len(line) for line in lines)
+    
+    # Adjust width to the longest line, but keep it at least the given width
+    width = max(width, max_line_length + 2)  # +2 to leave space for the border on both sides
+    
+    # Create the border based on the dynamic width
     border = "+" + "-" * width + "+"
+    
+    # Print the top border
     print(border)
-    for line in text.split('\n'):
-        print(f"| {line:<{width}} |")
+    
+    # Print each line within the frame
+    for line in lines:
+        print(f"| {line:<{width - 2}} |")  # Subtract 2 for the borders on both sides
+    
+    # Print the bottom border
     print(border)
 
 

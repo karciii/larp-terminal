@@ -17,16 +17,25 @@ class Journal:
         self.configure_tts()
 
     def configure_tts(self):
-        """Configures the TTS engine."""
+        """Configures the TTS engine with a more robotic voice."""
         voices = self.tts_engine.getProperty('voices')
+        
+        # Try to select a robotic or male voice
         for voice in voices:
             if 'robot' in voice.name.lower() or 'male' in voice.name.lower():
                 self.tts_engine.setProperty('voice', voice.id)
                 break
         else:
             self.tts_engine.setProperty('voice', voices[0].id)  # Fallback to first available voice
-        self.tts_engine.setProperty('rate', 140)  # Adjust speed
-        self.tts_engine.setProperty('volume', 0.9)  # Set volume to 90%
+
+        # Setting a lower rate (slower speech) for a more mechanical tone
+        self.tts_engine.setProperty('rate', 80)  # Slower speed for a robotic feel
+        
+        # Setting pitch to lower values for a deeper, more metallic sound
+        self.tts_engine.setProperty('pitch', 11)  # Decrease pitch for a more robotic tone
+        
+        # Adjust volume to maintain a consistent robotic feel
+        self.tts_engine.setProperty('volume', 0.9)  # Volume at 90%
 
     def speak_text(self, text):
         """Reads the text aloud using TTS."""

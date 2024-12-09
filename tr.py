@@ -8,6 +8,7 @@ from encyclopedia import Encyclopedia
 import random
 from utilities import frame_effect, slow_print, glitch_line
 from journal import Journal
+from login import Login
 from time import sleep 
 
 class BootSequence:
@@ -97,22 +98,23 @@ class trCommands:
             slow_print(Fore.GREEN + " Decryption successful. Displaying map...")
             ascii_map = """
                                 _,__        .:
-                        Darwin <*  /        | \
+                        Darwin <*  /        | \\
                             .-./     |.     :  :,
                         /           '-._/     \_
-                        /                '       \
+                        /                '       \\
                         .'                         *: Brisbane
                     .-'                             ;
                     |                               |
                     \                              /
                     |                            /
-                Perth  \*        __.--._          /
+                Perth  \\*        __.--._          /
                         \     _.'       \:.       |
-                        >__,-'             \_/*_.-'
+                        >__,-'             \\_/*_.-'
                                             Melbourne
                                             :--,
                                             '/
                     """
+
             slow_print(Fore.CYAN + ascii_map)
             slow_print(Fore.GREEN + f" {result} ")
 
@@ -128,7 +130,8 @@ class tr:
             "help": self.show_help,
             "exit": self.exit_tr,
             "open_en": Encyclopedia().menu,
-            "open_jr": self.journal_menu
+            "open_jr": self.journal_menu,
+            "login": self.login
         }
 
     def start(self):
@@ -159,6 +162,7 @@ class tr:
         | exit    : Exit the Terminal.                                |
         | open_en : Access the encyclopedia.                          |
         | open_jr : Access and manage your journal entries.           |
+        | login   : Open login menu.                                  |
         +-------------------------------------------------------------+
         """
         slow_print(Fore.CYAN + help_text)
@@ -171,3 +175,7 @@ class tr:
     def journal_menu(self):
         journal = Journal()
         journal.journal_menu()
+
+    def login(self):
+        login = Login()
+        login.login_menu()
