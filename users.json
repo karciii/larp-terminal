@@ -1,0 +1,18 @@
+{
+    "admin": {
+        "password": "adminpass",
+        "access_level": 5
+    },
+    "user1": {
+        "password": "user1pass",
+        "access_level": 3
+    },
+    "user2": {
+        "password": "user2pass",
+        "access_level": 2
+    },
+    "guest": {
+        "password": "guestpass",
+        "access_level": 1
+    }
+}

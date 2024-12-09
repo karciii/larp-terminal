@@ -104,9 +104,11 @@ class Login:
     def get_menu_options(self, access_level):
         # Opcje dostępne w menu na podstawie poziomu dostępu
         all_options = [
-            "View profile",
-            "Edit notes",
-            "Access logs",
+            "Gołe baby",
+            "Notatki",
+            "Otwórz logi",
+            "Odszyfruj wiadomość",
+            "Uzbrój rakiete"
         ]
         # Zwraca tylko dostępne opcje na podstawie poziomu dostępu użytkownika
         return all_options[:access_level]
