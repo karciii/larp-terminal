@@ -15,50 +15,71 @@ init(autoreset=True)  # Automatically reset colors after each print.
 class BootSequence:
     inactivity_timer = None
     inactivity_timeout = 300  # 5 minutes in seconds.
+    inactive_flag = False
 
     @staticmethod
     def start_inactivity_timer():
         # Start a timer for inactivity detection.
         def inactivity_countdown():
             time.sleep(BootSequence.inactivity_timeout)
-            slow_print(Fore.YELLOW + "\nNo activity detected. Press any key to continue...")
-            BootSequence.prompt_for_restart()
+            BootSequence.inactive_flag = True
+            slow_print(Fore.RED + "\n[INACTIVE] System detected inactivity. Press any key to restart.")
 
+        BootSequence.inactive_flag = False
         BootSequence.inactivity_timer = threading.Thread(target=inactivity_countdown)
         BootSequence.inactivity_timer.daemon = True  # The thread will terminate when the main thread exits.
         BootSequence.inactivity_timer.start()
 
     @staticmethod
-    def stop_inactivity_timer():
-        # Stop the inactivity timer.
+    def reset_inactivity_timer():
+        # Reset the inactivity timer.
+        BootSequence.inactive_flag = False
         if BootSequence.inactivity_timer:
             BootSequence.inactivity_timer = None
+        BootSequence.start_inactivity_timer()
+
+    @staticmethod
+    def monitor_activity():
+        # Monitor for keyboard activity to reset the timer or restart the boot sequence.
+        while True:
+            if BootSequence.inactive_flag:
+                keyboard.read_event()  # Wait for any key press.
+                BootSequence.inactive_flag = False
+                BootSequence.run()
+            sleep(0.1)
 
     @staticmethod
     def load_core_modules():
         # Simulate loading core modules with an animation.
-        slow_print("\n[ CORE MODULES LOADED ]\n")
+        slow_print(Fore.YELLOW + "\n[ LOADING CORE MODULES... ]\n")
+        loading_animation("Loading Core Modules", duration=5, total_steps=100)
+        slow_print(Fore.GREEN + "\n[ CORE MODULES LOADED ]\n")
         matrix_rain(duration=3)
 
     @staticmethod
     def initialize_security_protocols():
         # Simulate the initialization of security protocols.
-        slow_print("\n[ Initializing Security Protocols... ]\n")
+        slow_print(Fore.GREEN + "[ Initializing Security Protocols... ]")
         flickering_status_line(" Authentication System ")
         sleep(0.5)
+        slow_print(Fore.GREEN + "[ Security Protocols Initialized ]")
+
+    @staticmethod
+    def run_diagnostics():
+        # Simulate running diagnostics with animations.
+        slow_print(Fore.CYAN + "[ Running System Diagnostics... ]")
+        data_wave_effect(duration=5)
+        slow_print(Fore.CYAN + "[ Diagnostics Complete ]")
 
     @staticmethod
     def run():
         # Main boot sequence logic.
-        slow_print("[ SYSTEM BOOT INITIATED... ]\n")
-        BootSequence.start_inactivity_timer()
-
-        loading_animation(" Loading Core Modules ")
-
+        BootSequence.reset_inactivity_timer()
         BootSequence.load_core_modules()
         BootSequence.initialize_security_protocols()
+        BootSequence.run_diagnostics()
 
-        slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
+        slow_print(Fore.GREEN + "[ ALL SYSTEMS OPERATIONAL ]\n")
         slow_print(generate_footer())
 
     @staticmethod
@@ -100,7 +121,7 @@ class trCommands:
             " Unidentified object located in the area. ",
             " Radiation levels within safe limits. "
         ]
-        slow_print(f" SCAN RESULT: {random.choice(results)} ")
+        slow_print(f"SCAN RESULT: {random.choice(results)} ")
         slow_print(generate_footer())
 
     @staticmethod
@@ -176,21 +197,24 @@ class tr:
 
     def start(self):
         # Start the main terminal system.
+        threading.Thread(target=BootSequence.monitor_activity, daemon=True).start()
         self.display_logo()
         BootSequence.run()  # Start the boot sequence.
         frame_effect(" Type 'help' to see the list of commands. ")
-        slow_print(generate_footer())  # Add footer after boot.
+        slow_print(Fore.RED + generate_footer())  # Add footer after boot.
         while True:
             user_input = input(Fore.GREEN + "> ").strip().lower()
+            BootSequence.reset_inactivity_timer()
             if user_input in self.commands:
                 self.commands[user_input]()
             else:
-                slow_print(Fore.RED + " Unknown command. Type 'help' for available commands. \n")
+                slow_print(Fore.RED + "Unknown command. Type 'help' for available commands.")
                 slow_print(generate_footer())
 
     def display_logo(self):
         # Display the logo with animations.
         for line in EVIL_CORP_ASCII.splitlines():
+            print(Fore.RED, end="")
             slow_print(Fore.RED + line, min_delay=0.001, max_delay=0.02)
         slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System")
 
@@ -210,22 +234,13 @@ class tr:
         | login   : Open login menu.                                  |
         +-------------------------------------------------------------+
         """
+        slow_print(help_text)
 
-        slow_print(Fore.CYAN + " Loading Help Information... ", end="\n")
-        slow_print(Fore.GREEN + "[HELP MENU]")
-        slow_print(Fore.YELLOW + help_text)
-        slow_print(Fore.RED, generate_footer())
-
-    @staticmethod
-    def exit_tr():
-        # Exit the terminal system with shutdown animations.
-        slow_print("[INITIALIZE] Shutting down the EVIL CORP terminal server... ")
-        slow_print("[FINALIZE] Closing all connections...")
-        slow_print("[TERMINATE] Terminating processes...")
-        slow_print("[SHUTDOWN] Shutting down the system...")
-        slow_print("[EXIT] Exiting the program...")
-        slow_print(Fore.GREEN + " [ TERMINATION COMPLETE ] ")
+    def exit_tr(self):
+        # Exit the terminal system.
+        slow_print(Fore.RED + "Exiting the terminal system...")
         BootSequence.shutdown_animation()
+        exit(0)
 
     def journal_menu(self):
         # Access the journal menu.
