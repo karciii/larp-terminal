@@ -9,7 +9,7 @@ from utilities import frame_effect
 class Journal:
     """Handles the player's journal system with histories."""
 
-    JOURNAL_FILE = "journal.json"
+    JOURNAL_FILE = "data/journal.json"
 
     def __init__(self):
         self.entries = self.load_entries()

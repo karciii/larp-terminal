@@ -3,29 +3,54 @@ import random
 from colorama import Fore, Back, Style
 from tqdm import tqdm  # Biblioteka do paskow postepu
 from ascii_art import FOOTER_TEMPLATE
+import threading
+import keyboard  # Make sure to install this package
 
 
-def slow_print(text, min_delay=0.002, max_delay=0.05, newline=True):
+def slow_print(text, min_delay=0.05, max_delay=0.1, end='\n'):
+    """
+    Funkcja do powolnego drukowania tekstu, z opcjonalnym określeniem opóźnienia i sposobu zakończenia.
+    
+    :param text: Tekst do wydrukowania
+    :param min_delay: Minimalne opóźnienie pomiędzy znakami
+    :param max_delay: Maksymalne opóźnienie pomiędzy znakami
+    :param end: Jak zakończyć wydruk (domyślnie nowa linia)
+    """
     for char in text:
-        print(char, end='', flush=True)
-        time.sleep(random.uniform(min_delay, max_delay))
-    if newline:
-        print()
+        print(char, end='', flush=True)  # Zmieniono end na ''
+        time.sleep(random.uniform(min_delay, max_delay))  # Losowe opóźnienie
+    print(end, end='')  # Dodajemy końcowy argument end (np. '', '\n' lub coś innego)
 
+
+stop_animation = False
+
+def check_for_user_input():
+    global stop_animation
+    while not stop_animation:
+        if keyboard.is_pressed('u'):
+            stop_animation = True
+            print(Fore.RED + "\n[ANIMATION INTERRUPTED]")
+            break
+        time.sleep(0.1)
 
 def loading_animation(text="Loading", duration=random.randint(3, 60), total_steps=random.randint(1, 5000)):
-    """
-    Loading animation with progress bar and dots.
-    
-    :param text: The text displayed before the animation (default is "Loading").
-    :param duration: Duration of the animation in seconds.
-    :param total_steps: Total number of steps on the progress bar.
-    """
+    global stop_animation
+    stop_animation = False
+    listener_thread = threading.Thread(target=check_for_user_input)
+    listener_thread.daemon = True
+    listener_thread.start()
+
     with tqdm(total=total_steps, desc=text, ncols=80, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]") as pbar:
-        step_duration = duration / total_steps  # Duration for each progress step
+        step_duration = duration / total_steps
         for _ in range(total_steps):
+            if stop_animation:
+                break
             time.sleep(step_duration)
             pbar.update(1)
+
+# Example usage
+loading_animation("Loading Core Modules")
+
 
 
 def matrix_rain(duration=5, width=100):

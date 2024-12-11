@@ -1,7 +1,7 @@
 {
     "admin": {
         "password": "adminpass",
-        "access_level": 5
+        "access_level": 7
     },
     "user1": {
         "password": "user1pass",

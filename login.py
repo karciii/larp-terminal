@@ -1,56 +1,91 @@
+# File: login.py
 import json
 import time
-from random import randint
+from random import choice
 from utilities import slow_print, glitch_line, loading_animation
 from colorama import Fore
-
+from tabulate import tabulate  # Do formatowania tabel logów
 
 class Login:
     def __init__(self):
-        # Załaduj dane użytkowników
         self.users = self.load_users()
         self.failed_attempts = {}
         self.locked_users = {}
-    
+
     def load_users(self):
         try:
             with open('users.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
-            print("DEBUG: users.json not found!")
             slow_print(Fore.RED + "ERROR: users.json not found!")
             return {}
         except json.JSONDecodeError:
-            print("DEBUG: Error parsing users.json!")
             slow_print(Fore.RED + "ERROR: Error parsing users.json!")
             return {}
         except Exception as e:
-            print(f"DEBUG: Unexpected error: {e}")
             slow_print(Fore.RED + f"ERROR: {str(e)}")
             return {}
 
     def save_users(self):
-        # Zapisz zmiany w danych użytkowników
         try:
             with open('users.json', 'w') as f:
                 json.dump(self.users, f)
         except Exception as e:
             slow_print(Fore.RED + f"ERROR: Failed to save users data - {str(e)}")
 
+    def log_operation(self, username, operation_type, message_length):
+        log_entry = {
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "username": username,
+            "operation": operation_type,
+            "length": message_length
+        }
+        try:
+            with open('crypto_logs.json', 'a') as log_file:
+                log_file.write(json.dumps(log_entry) + "\n")
+        except Exception as e:
+            slow_print(Fore.RED + f"ERROR: Failed to write log - {str(e)}")
+
+    def view_crypto_logs(self):
+        try:
+            with open('crypto_logs.json', 'r') as log_file:
+                logs = [json.loads(log) for log in log_file.readlines()]
+                if logs:
+                    table = [
+                        [log["timestamp"], log["username"], log["operation"], log["length"]]
+                        for log in logs
+                    ]
+                    slow_print(Fore.GREEN + tabulate(
+                        table, headers=["Timestamp", "Username", "Operation", "Message Length"], tablefmt="grid"
+                    ))
+                else:
+                    slow_print(Fore.YELLOW + "No logs available.")
+        except FileNotFoundError:
+            slow_print(Fore.RED + "No logs file found.")
+        except json.JSONDecodeError:
+            slow_print(Fore.RED + "Error reading logs file.")
+
+    def xor_encrypt(self, message):
+        key = len(message)
+        encrypted = ''.join(chr(ord(char) ^ key) for char in message)
+        return encrypted
+
+    def xor_decrypt(self, message):
+        key = len(message)
+        decrypted = ''.join(chr(ord(char) ^ key) for char in message)
+        return decrypted
+
     def login_menu(self):
-        # Logowanie użytkownika
         username = input(Fore.YELLOW + "Username: ").strip()
 
-        # Sprawdź, czy konto jest zablokowane
         if username in self.locked_users:
             if time.time() < self.locked_users[username]:
                 slow_print(Fore.RED + "Account is locked. Try again later.")
                 glitch_line("LOCKED: Unauthorized access detected.")
                 return
             else:
-                del self.locked_users[username]  # Odblokowanie użytkownika po 1 minucie
+                del self.locked_users[username]
 
-        # Jeśli użytkownik nie istnieje
         if username not in self.users:
             slow_print(Fore.RED + "User not found!")
             glitch_line("ERROR: User does not exist in the database.")
@@ -69,17 +104,12 @@ class Login:
                 glitch_line("ERROR: Invalid password.")
                 attempts += 1
 
-        # lock the account after 3 wrong tries
         slow_print(Fore.RED + "Too many failed attempts. Locking account for 1 minute.")
-        self.locked_users[username] = time.time() + 60  # lock for 1 minute
+        self.locked_users[username] = time.time() + 60
         glitch_line("Account temporarily locked.")
-        glitch_line("Try again in some time.")
-
 
     def check_credentials(self, username, password):
-        if username in self.users and self.users[username]['password'] == password:
-            return True
-        return False
+        return username in self.users and self.users[username]['password'] == password
 
     def show_user_menu(self, username):
         user_level = self.users[username]['access_level']
@@ -102,28 +132,70 @@ class Login:
                 glitch_line("ERROR: Invalid menu option.")
 
     def get_menu_options(self, access_level):
-        # Opcje dostępne w menu na podstawie poziomu dostępu
         all_options = [
-            "Gołe baby",
-            "Notatki",
-            "Otwórz logi",
-            "Odszyfruj wiadomość",
-            "Uzbrój rakiete"
+            "Zobacz gołe baby (ASCII art)",
+            "Otwórz Logi",
+            "Zaszyfruj Wiadomość",
+            "Odszyfruj Wiadomość",
+            "Zobacz logi enkrypcji",
+            "Uzbrój rakietę",
+            "Edytuj Notatki",
         ]
-        # Zwraca tylko dostępne opcje na podstawie poziomu dostępu użytkownika
         return all_options[:access_level]
 
     def handle_option(self, option, username):
-        # Obsługuje wybraną opcję z menu
         if option == 1:
-            slow_print(f"Viewing profile of {username}")
-            glitch_line("Profile data retrieved.")
+            self.view_baby_ascii()
         elif option == 2:
-            slow_print(f"Editing notes for {username}")
-            glitch_line("Notes opened for modification.")
+            self.access_logs()
         elif option == 3:
-            slow_print("Accessing logs")
-            glitch_line("Logs accessed.")
+            self.encrypt_message(username)
+        elif option == 4:
+            self.decrypt_message(username)
+        elif option == 5:
+            self.view_crypto_logs()
+        elif option == 6:
+            self.arm_rocket()
+        elif option == 7:
+            self.edit_notes(username)
         else:
-            slow_print(Fore.RED + "Unknown option selected.")
-            glitch_line("ERROR: Invalid option.")
+            slow_print(Fore.RED + "Wybrano nieznaną opcję.")
+            glitch_line("ERROR: Niepoprawna opcja.")
+
+    def view_baby_ascii(self):
+        try:
+            with open('baby_art.txt', 'r', encoding='utf-8') as f:  # Określenie kodowania
+                ascii_art = f.read().split('--splitter--')
+                selected_art = choice(ascii_art).strip()
+                slow_print(Fore.GREEN + selected_art)
+        except FileNotFoundError:
+            slow_print(Fore.RED + "ERROR: baby_art.txt not found!")
+        except UnicodeDecodeError as e:
+            slow_print(Fore.RED + f"ERROR: Could not decode the file - {str(e)}")
+
+    def encrypt_message(self, username):
+        message = input(Fore.YELLOW + "Enter the message to encrypt: ").strip()
+        encrypted_message = self.xor_encrypt(message)
+        slow_print(Fore.GREEN + f"Encrypted Message: {encrypted_message}")
+        self.log_operation(username, "Encryption", len(message))
+
+    def decrypt_message(self, username):
+        encrypted_message = input(Fore.YELLOW + "Enter the encrypted message: ").strip()
+        try:
+            decrypted_message = self.xor_decrypt(encrypted_message)
+            slow_print(Fore.GREEN + f"Decrypted Message: {decrypted_message}")
+            self.log_operation(username, "Decryption", len(encrypted_message))
+        except Exception as e:
+            slow_print(Fore.RED + f"ERROR: Decryption failed - {str(e)}")
+
+    def edit_notes(self, username):
+        slow_print(Fore.GREEN + f"Editing notes for {username}.")
+        glitch_line("Notes opened for modification.")
+
+    def access_logs(self):
+        slow_print(Fore.GREEN + "Accessing logs.")
+        glitch_line("Logs accessed.")
+
+    def arm_rocket(self):
+        slow_print(Fore.RED + "Arming rocket!")
+        glitch_line("Rocket armed. Awaiting further commands.")
