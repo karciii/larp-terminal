@@ -1,14 +1,14 @@
-from encyclopedia import Encyclopedia
-from journal import Journal
-from tr import tr, trCommands
-from animations import frame_effect, slow_print
+from tr import BootSequence, tr
+from animations import slow_print
 from colorama import Fore
-
 
 if __name__ == "__main__":
     try:
-        tr = tr()
-        tr.start()
-        main_menu()
+        boot_instance = BootSequence()
+        boot_instance.run()  
+        
+        terminal = tr() 
+        terminal.start()  
+
     except KeyboardInterrupt:
-        slow_print("\nProgram terminated.")
+        slow_print("\nProgram zakończony.")

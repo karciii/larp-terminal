@@ -1,2 +1,4 @@
 {"timestamp": "2024-12-11 10:07:12", "username": "admin", "operation": "Encryption", "length": 4}
 {"timestamp": "2024-12-11 10:08:04", "username": "admin", "operation": "Decryption", "length": 4}
+{"timestamp": "2024-12-11 15:02:56", "username": "admin", "operation": "Encryption", "length": 8}
+{"timestamp": "2024-12-11 15:03:13", "username": "admin", "operation": "Decryption", "length": 1}

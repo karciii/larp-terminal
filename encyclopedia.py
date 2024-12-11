@@ -1,7 +1,8 @@
 import json
 import os
+import textwrap
 from colorama import Fore
-from animations import slow_print, frame_effect, glitch_line
+from animations import slow_print, frame_effect
 
 class Encyclopedia:
     """Handles the in-game encyclopedia."""
@@ -19,7 +20,7 @@ class Encyclopedia:
         if not os.path.exists(self.ENCYCLOPEDIA_FILE):
             slow_print(Fore.RED + "[ERROR] Encyclopedia file not found. Creating a new one...")
             return {}
-        with open(self.ENCYCLOPEDIA_FILE, "r") as file:
+        with open(self.ENCYCLOPEDIA_FILE, "r", encoding="utf-8") as file:
             return json.load(file)
 
     def load_users(self):
@@ -27,13 +28,15 @@ class Encyclopedia:
         if not os.path.exists(self.USERS_FILE):
             slow_print(Fore.RED + "[ERROR] Users file not found. Creating a new one...")
             return {}
-        with open(self.USERS_FILE, "r") as file:
+        with open(self.USERS_FILE, "r", encoding="utf-8") as file:
             return json.load(file)
 
-    def save_encyclopedia(self):
-        """Saves the encyclopedia data to a file."""
-        with open(self.ENCYCLOPEDIA_FILE, "w") as file:
-            json.dump(self.data, file, indent=4)
+    def validate_name(self, name):
+        """Validates a name for categories or entries."""
+        if not name or len(name) > 50 or any(char in name for char in "!@#$%^&*()[]{}<>?/\\|`~"):
+            slow_print(Fore.RED + "[ERROR] Invalid name. Avoid special characters and limit to 50 characters.")
+            return False
+        return True
 
     def menu(self):
         """Displays the encyclopedia menu."""
@@ -41,82 +44,57 @@ class Encyclopedia:
             frame_effect(" Encyclopedia Menu ", width=60)
             slow_print(" 1. Search for an entry")
             slow_print(" 2. View all entries")
+            slow_print(" 3. View category summary")
             if self.current_user and self.current_user['access_level'] == 7:
-                slow_print(" 3. Add/Edit an entry (Admin only)")
-                slow_print(" 4. Add a new category (Admin only)")
-            slow_print(" 5. Exit to main menu")
+                slow_print(" 4. Add/Edit an entry (Admin only)")
+                slow_print(" 5. Add a new category (Admin only)")
+            slow_print(" 6. Exit to main menu")
             choice = input(Fore.GREEN + "> ").strip()
 
             if choice == "1":
                 self.search_entry()
             elif choice == "2":
                 self.view_all_entries()
-            elif choice == "3" and self.current_user and self.current_user['access_level'] == 7:
-                self.add_or_edit_entry()
+            elif choice == "3":
+                self.view_categories_summary()
             elif choice == "4" and self.current_user and self.current_user['access_level'] == 7:
+                self.add_or_edit_entry()
+            elif choice == "5" and self.current_user and self.current_user['access_level'] == 7:
                 self.add_category()
-            elif choice == "5":
+            elif choice == "6":
                 slow_print(Fore.YELLOW + "Returning to main menu...")
                 break
             else:
                 slow_print(Fore.RED + "Invalid choice. Please try again.")
 
-    def authenticate_user(self):
-        """Authenticates a user and sets the current user."""
-        username = input("Username: ").strip()
-        password = input("Password: ").strip()
+    def display_entry(self, entry_details):
+        """Displays entry details in a table format with improved aesthetics."""
+        table_header = Fore.CYAN + "+" + "-" * 20 + "+" + "-" * 50 + "+"
+        table_row_format = "| {key:<18} | {value:<48} |"
 
-        user = self.users.get(username)
-        if user and user["password"] == password:
-            self.current_user = user
-            slow_print(Fore.GREEN + "[SUCCESS] User authenticated.")
-            return True
-        slow_print(Fore.RED + "[ERROR] Authentication failed.")
-        return False
+        slow_print(table_header)
+        slow_print(Fore.GREEN + "| Key                | Value                                              |")
+        slow_print(table_header)
 
-    def add_category(self):
-        """Adds a new category to the encyclopedia. Admin only."""
-        if not self.authenticate_user() or self.current_user['access_level'] != 7:
-            return
+        for key, value in entry_details.items():
+            if isinstance(value, list):
+                value = ", ".join(value)
 
-        category_name = input("Enter new category name: ").strip()
-        if category_name in self.data:
-            slow_print(Fore.RED + f"Category '{category_name}' already exists.")
-        else:
-            self.data[category_name] = {}
-            self.save_encyclopedia()
-            slow_print(Fore.GREEN + f"Category '{category_name}' has been added.")
+            wrapped_value = textwrap.fill(value, width=48)
+            for idx, line in enumerate(wrapped_value.split("\n")):
+                if idx == 0:
+                    slow_print(Fore.WHITE + table_row_format.format(key=key.capitalize(), value=line))
+                else:
+                    slow_print(Fore.WHITE + table_row_format.format(key="", value=line))
 
-    def add_or_edit_entry(self):
-        """Adds or edits an entry in the encyclopedia. Admin only."""
-        if not self.authenticate_user() or self.current_user['access_level'] != 7:
-            return
+        slow_print(table_header)
 
-        category_name = input("Enter category name: ").strip()
-        if category_name not in self.data:
-            slow_print(Fore.RED + f"Category '{category_name}' does not exist.")
-            return
-
-        entry_name = input("Enter entry name: ").strip()
-        if entry_name in self.data[category_name]:
-            slow_print(Fore.YELLOW + f"Editing existing entry '{entry_name}' in category '{category_name}'.")
-        else:
-            slow_print(Fore.YELLOW + f"Adding new entry '{entry_name}' to category '{category_name}'.")
-
-        entry_details = {}
-        while True:
-            key = input("Enter detail key (or leave blank to finish): ").strip()
-            if not key:
-                break
-            value = input(f"Enter value for '{key}': ").strip()
-            entry_details[key] = value
-
-        self.data[category_name][entry_name] = entry_details
-        self.save_encyclopedia()
-        slow_print(Fore.GREEN + f"Entry '{entry_name}' has been saved in category '{category_name}'.")
+    def highlight_text(self, text, keyword):
+        """Highlights the keyword in the given text."""
+        return text.replace(keyword, Fore.RED + keyword + Fore.RESET)
 
     def search_entry(self):
-        """Searches for an entry by keyword."""
+        """Searches for an entry by keyword with highlighted results."""
         keyword = input("Enter search keyword: ").strip().lower()
         results = []
 
@@ -128,27 +106,17 @@ class Encyclopedia:
         if results:
             slow_print(Fore.YELLOW + f"Found {len(results)} matching entries:\n")
             for category, entry_name, details in results:
-                frame_effect(f" {entry_name.capitalize()} ({category.capitalize()}) ", width=60)
+                frame_effect(f" {self.highlight_text(entry_name.capitalize(), keyword)} ({category.capitalize()}) ", width=60)
                 self.display_entry(details)
         else:
             slow_print(Fore.RED + f"No entries found containing '{keyword}'.")
 
-    def view_all_entries(self):
-        """Displays all entries in all categories."""
+    def view_categories_summary(self):
+        """Displays a summary of all categories and their entry counts."""
         if not self.data:
-            slow_print(Fore.RED + "No entries available.")
+            slow_print(Fore.RED + "No categories available.")
             return
 
-        for category, entries in self.data.items():
-            frame_effect(f" {category.capitalize()} ", width=60)
-            for entry_name, details in entries.items():
-                self.display_entry(details)
-
-    def display_entry(self, entry_details):
-        """Displays entry details in a table format."""
-        frame_effect(" Entry Details ", width=60)
-        for key, value in entry_details.items():
-            if isinstance(value, list):
-                value = ", ".join(value)
-            slow_print(f"{key.capitalize():<15}: {value}")
-        slow_print(Fore.YELLOW + "-" * 60)
+        frame_effect(" Encyclopedia Categories Summary ", width=60)
+        for category, entries in sorted(self.data.items()):
+            slow_print(Fore.YELLOW + f"Category: {category.capitalize()} - {len(entries)} entries")

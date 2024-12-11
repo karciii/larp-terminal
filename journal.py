@@ -1,9 +1,7 @@
 import json
 import pyttsx3
-import time
 from colorama import Fore
-from animations import slow_print, glitch_line
-from utilities import frame_effect
+from animations import slow_print, frame_effect
 
 
 class Journal:
@@ -29,10 +27,10 @@ class Journal:
             self.tts_engine.setProperty('voice', voices[0].id)  # Fallback to first available voice
 
         # Setting a lower rate (slower speech) for a more mechanical tone
-        self.tts_engine.setProperty('rate', 80)  # Slower speed for a robotic feel
+        self.tts_engine.setProperty('rate', 90)  # Slower speed for a robotic feel
         
         # Setting pitch to lower values for a deeper, more metallic sound
-        self.tts_engine.setProperty('pitch', 11)  # Decrease pitch for a more robotic tone
+        self.tts_engine.setProperty('pitch', 8)  # Decrease pitch for a more robotic tone
         
         # Adjust volume to maintain a consistent robotic feel
         self.tts_engine.setProperty('volume', 0.9)  # Volume at 90%

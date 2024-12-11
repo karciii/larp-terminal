@@ -1,109 +1,86 @@
 import random
 import time
 import threading
-import keyboard  # Do obsługi klawiszy
+import keyboard
 from time import sleep
-from colorama import Fore
-from ascii_art import EVIL_CORP_ASCII, FOOTER_TEMPLATE
-from utilities import (
-    slow_print, loading_animation, matrix_rain, glitch_line,
-    data_wave_effect, flickering_status_line, generate_footer, frame_effect
-)
+from colorama import Fore, Style, init
+from data.ascii_art import EVIL_CORP_ASCII, FOOTER_TEMPLATE
+from animations import slow_print, glitch_line, loading_animation, data_wave_effect, generate_footer, flickering_status_line, matrix_rain, frame_effect
 from encyclopedia import Encyclopedia
 from journal import Journal
 from login import Login
 
+init(autoreset=True)  # Automatically reset colors after each print.
 
 class BootSequence:
-    stop_boot = False  # Flaga kontrolująca przerwanie bootowania
-    inactivity_timer = None  # Zmienna do monitorowania nieaktywności
-    inactivity_timeout = 300  # 5 minut w sekundach
-
-    @staticmethod
-    def check_for_user_input():
-        """Monitorowanie klawisza 'u' w tle i ustawienie flagi do zatrzymania animacji."""
-        while not BootSequence.stop_boot:
-            if keyboard.is_pressed('u'):  # Jeśli naciśnięto 'u'
-                BootSequence.stop_boot = True
-                print(Fore.RED + "\n[BOOT SEQUENCE INTERRUPTED]")
-                break
-            sleep(0.1)  # Sprawdzaj co 100ms
+    inactivity_timer = None
+    inactivity_timeout = 300  # 5 minutes in seconds.
 
     @staticmethod
     def start_inactivity_timer():
-        """Uruchomienie timera do monitorowania nieaktywności (5 minut)."""
+        # Start a timer for inactivity detection.
         def inactivity_countdown():
             time.sleep(BootSequence.inactivity_timeout)
-            if not BootSequence.stop_boot:
-                slow_print(Fore.YELLOW + "\nNo activity detected. Press any key to continue...")
-                input()  # Użytkownik musi nacisnąć klawisz, aby kontynuować
-                BootSequence.run()  # Ponownie uruchamiamy proces bootowania
+            slow_print(Fore.YELLOW + "\nNo activity detected. Press any key to continue...")
+            BootSequence.prompt_for_restart()
 
         BootSequence.inactivity_timer = threading.Thread(target=inactivity_countdown)
-        BootSequence.inactivity_timer.daemon = True  # Wątek zakończy się, gdy główny wątek się zakończy
+        BootSequence.inactivity_timer.daemon = True  # The thread will terminate when the main thread exits.
         BootSequence.inactivity_timer.start()
 
     @staticmethod
     def stop_inactivity_timer():
-        """Zatrzymanie timera nieaktywności."""
+        # Stop the inactivity timer.
         if BootSequence.inactivity_timer:
             BootSequence.inactivity_timer = None
 
     @staticmethod
-    def run():
-        slow_print("[ SYSTEM BOOT INITIATED... ]\n")
-        
-        # Uruchomienie wątku monitorującego klawisze
-        listener_thread = threading.Thread(target=BootSequence.check_for_user_input)
-        listener_thread.daemon = True  # Wątek zakończy się, gdy główny wątek się zakończy
-        listener_thread.start()
+    def load_core_modules():
+        # Simulate loading core modules with an animation.
+        slow_print("\n[ CORE MODULES LOADED ]\n")
+        matrix_rain(duration=3)
 
-        BootSequence.start_inactivity_timer()  # Uruchamiamy timer nieaktywności
-        
+    @staticmethod
+    def initialize_security_protocols():
+        # Simulate the initialization of security protocols.
+        slow_print("\n[ Initializing Security Protocols... ]\n")
+        flickering_status_line(" Authentication System ")
+        sleep(0.5)
+
+    @staticmethod
+    def run():
+        # Main boot sequence logic.
+        slow_print("[ SYSTEM BOOT INITIATED... ]\n")
+        BootSequence.start_inactivity_timer()
+
         loading_animation(" Loading Core Modules ")
 
-        # Jeśli animacja bootowania nie została przerwana, kontynuuj
-        while not BootSequence.stop_boot:
-            slow_print("\n[ CORE MODULES LOADED ]\n")
-            matrix_rain(duration=3)
-            slow_print("\n[ Initializing Security Protocols... ]\n")
-            flickering_status_line(" Authentication System ")
-            sleep(0.5)
-
-            # Jeśli animacja została przerwana, zakończ
-            if BootSequence.stop_boot:
-                break
+        BootSequence.load_core_modules()
+        BootSequence.initialize_security_protocols()
 
         slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
-        slow_print("-" * 60)
         slow_print(generate_footer())
 
     @staticmethod
-    def boot_animation():
-        """Animacja początkowa, przerwana po naciśnięciu 'u'."""
-        for _ in range(20):  # Animacja trwa przez 20 iteracji
-            if keyboard.is_pressed('u'):
-                slow_print(Fore.GREEN + " Skipping boot sequence and entering menu... \n")
-                return
-            glitch_line(Fore.CYAN + "[ SYSTEM BOOTING... ]")
-            time.sleep(0.1)
-
-        # Po zakończeniu animacji, przerwa i przejście do końca
-        BootSequence.shutdown_animation()
-
-    @staticmethod
     def shutdown_animation():
-        """Animacja zamykania systemu oraz glitchowe 'press any key to boot'"""
+        # Shutdown animation with a glitch effect.
         slow_print(Fore.RED + " [ Shutting down system... ]")
         time.sleep(1)
-        for _ in range(10):
-            glitch_line(Fore.MAGENTA + " [ Press any key to boot ] ")
-            time.sleep(0.1)
-
         slow_print(Fore.GREEN + "[ SYSTEM SHUTDOWN COMPLETE ]")
-        slow_print(Fore.YELLOW + "[ PRESS ANY KEY TO BOOT ]")
+        time.sleep(1)
+        slow_print(Fore.MAGENTA + "[ GOODBYE ]")
+        time.sleep(1)
+        slow_print(Fore.BLUE + "[ THANK YOU FOR USING THE EVIL CORP TERMINAL SYSTEM ]")
+        slow_print(Fore.WHITE + "[ COPYRIGHT © 2137 EVIL CORP. ALL RIGHTS RESERVED. ]")
+        time.sleep(5)
+        BootSequence.prompt_for_restart()
+
+    @staticmethod
+    def prompt_for_restart():
+        # Display a prompt for restarting the system.
+        slow_print(Fore.YELLOW + " Press any key to boot... ")
         while True:
-            if keyboard.is_pressed('enter'):  # Naciśnięcie 'Enter' by ponownie uruchomić system
+            if keyboard.read_event():
                 break
             time.sleep(0.1)
         slow_print(Fore.YELLOW + " Booting...\n")
@@ -113,6 +90,7 @@ class BootSequence:
 class trCommands:
     @staticmethod
     def gadget_scan():
+        # Simulate a gadget scan with animations.
         slow_print("\n\n\n Activating Scanner... \n\n\n")
         loading_animation(" Scanning Area ")
         data_wave_effect(duration=2)
@@ -127,22 +105,27 @@ class trCommands:
 
     @staticmethod
     def gadget_hack():
+        # Simulate a hacking attempt with animations.
         slow_print(" Connecting to target system... ")
         glitch_line(" Establishing secure connection... ")
         loading_animation(" Decrypting Firewall ")
         success = random.random() > 0.4
         if success:
-            data_wave_effect(duration=2)
-            glitch_line("\n HACK SUCCESSFUL! Access Granted! \n")
-            glitch_line("\n HACK SUCCESSFUL! Access Granted! \n")
+            for _ in range(3):
+                data_wave_effect(duration=1)
+                glitch_line("\n         HACK SUCCESSFUL! Access Granted!    HACK SUCCESSFUL! Access Granted!    HACK SUCCESSFUL! Access Granted \n")
         else:
-            for i in range(random.randint(1, 13)):
-                glitch_line(" HACK FAILED! Intrusion detected! ")
-                sleep(1)
+            for _ in range(random.randint(5, 15)):
+                glitch_line("           HACK FAILED! Intrusion detected!        ")
+                sleep(0.2)
+            slow_print(Fore.RED + "\n[ALERT] Connection Terminated!")
+            flickering_status_line(" Alerting Security... ")
+
         slow_print(generate_footer())
 
     @staticmethod
     def gadget_decrypt():
+        # Simulate a decryption process with animations.
         slow_print(" Initiating decryption sequence... \n\n")
         loading_animation(" Decrypting secure files... ")
         scenarios = [
@@ -179,6 +162,7 @@ class trCommands:
 
 class tr:
     def __init__(self):
+        # Initialize command mappings.
         self.commands = {
             "scan": trCommands.gadget_scan,
             "hack": trCommands.gadget_hack,
@@ -191,25 +175,27 @@ class tr:
         }
 
     def start(self):
+        # Start the main terminal system.
         self.display_logo()
-        BootSequence.run()  # Uruchamiamy proces bootowania
+        BootSequence.run()  # Start the boot sequence.
         frame_effect(" Type 'help' to see the list of commands. ")
+        slow_print(generate_footer())  # Add footer after boot.
         while True:
             user_input = input(Fore.GREEN + "> ").strip().lower()
             if user_input in self.commands:
                 self.commands[user_input]()
             else:
                 slow_print(Fore.RED + " Unknown command. Type 'help' for available commands. \n")
+                slow_print(generate_footer())
 
     def display_logo(self):
+        # Display the logo with animations.
         for line in EVIL_CORP_ASCII.splitlines():
             slow_print(Fore.RED + line, min_delay=0.001, max_delay=0.02)
-        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System \n")
+        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System")
 
     def show_help(self):
-        """
-        Wyświetlanie pomocy z użyciem animacji i glitchów.
-        """
+        # Display the help menu with commands.
         help_text = """
         +-------------------------------------------------------------+
         |                       Available Commands                    |
@@ -224,31 +210,29 @@ class tr:
         | login   : Open login menu.                                  |
         +-------------------------------------------------------------+
         """
-        
-        # Animacja wczytywania
-        slow_print(Fore.CYAN + " Loading Help Information... ", end="\n")
-        # loading_animation("Fetching Commands")
-        
-        # Glitchowy efekt wyświetlania pomocy
-        slow_print(Fore.GREEN + "[HELP MENU]")
-        slow_print(help_text)  # Glitchowy efekt wyświetlania pomocy
-        
-        # Powtarzający się glitch
-        slow_print(Fore.WHITE + " Returning to menu... ")
-        # loading_animation("Completing Help Sequence")
-        slow_print(Fore.RED + " [ Command menu completed ] ")
-        slow_print(generate_footer())  # Wyświetlenie stopki
 
-    def exit_tr(self):
-        frame_effect(" Shutting down the EVIL CORP tr... ", width=60)
-        slow_print(generate_footer())
-        exit(0)
+        slow_print(Fore.CYAN + " Loading Help Information... ", end="\n")
+        slow_print(Fore.GREEN + "[HELP MENU]")
+        slow_print(Fore.YELLOW + help_text)
+        slow_print(Fore.RED, generate_footer())
+
+    @staticmethod
+    def exit_tr():
+        # Exit the terminal system with shutdown animations.
+        slow_print("[INITIALIZE] Shutting down the EVIL CORP terminal server... ")
+        slow_print("[FINALIZE] Closing all connections...")
+        slow_print("[TERMINATE] Terminating processes...")
+        slow_print("[SHUTDOWN] Shutting down the system...")
+        slow_print("[EXIT] Exiting the program...")
+        slow_print(Fore.GREEN + " [ TERMINATION COMPLETE ] ")
+        BootSequence.shutdown_animation()
 
     def journal_menu(self):
+        # Access the journal menu.
         journal = Journal()
         journal.journal_menu()
 
     def login(self):
+        # Open the login menu.
         login = Login()
         login.login_menu()
-

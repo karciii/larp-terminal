@@ -2,10 +2,11 @@ import time
 import random
 from colorama import Fore, Back, Style
 from tqdm import tqdm  # Biblioteka do paskow postepu
-from ascii_art import FOOTER_TEMPLATE
+from data.ascii_art import FOOTER_TEMPLATE
 import threading
 import keyboard  # Make sure to install this package
 
+IS_ENABLED = True
 
 def slow_print(text, min_delay=0.05, max_delay=0.1, end='\n'):
     """
@@ -16,10 +17,14 @@ def slow_print(text, min_delay=0.05, max_delay=0.1, end='\n'):
     :param max_delay: Maksymalne opóźnienie pomiędzy znakami
     :param end: Jak zakończyć wydruk (domyślnie nowa linia)
     """
-    for char in text:
-        print(char, end='', flush=True)  # Zmieniono end na ''
-        time.sleep(random.uniform(min_delay, max_delay))  # Losowe opóźnienie
-    print(end, end='')  # Dodajemy końcowy argument end (np. '', '\n' lub coś innego)
+
+    if IS_ENABLED:
+        for char in text:
+            print(char, end='', flush=True)  # Zmieniono end na ''
+            time.sleep(random.uniform(min_delay, max_delay))  # Losowe opóźnienie
+        print(end, end='\n')  # Dodajemy końcowy argument end (np. '', '\n' lub coś innego)
+    else:
+        print(text)
 
 
 stop_animation = False
@@ -34,38 +39,37 @@ def check_for_user_input():
         time.sleep(0.1)
 
 def loading_animation(text="Loading", duration=random.randint(3, 60), total_steps=random.randint(1, 5000)):
-    global stop_animation
-    stop_animation = False
-    listener_thread = threading.Thread(target=check_for_user_input)
-    listener_thread.daemon = True
-    listener_thread.start()
+    if IS_ENABLED:
+        global stop_animation
+        stop_animation = False
+        listener_thread = threading.Thread(target=check_for_user_input)
+        listener_thread.daemon = True
+        listener_thread.start()
 
-    with tqdm(total=total_steps, desc=text, ncols=80, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]") as pbar:
-        step_duration = duration / total_steps
-        for _ in range(total_steps):
-            if stop_animation:
-                break
-            time.sleep(step_duration)
-            pbar.update(1)
-
-# Example usage
-loading_animation("Loading Core Modules")
-
-
+        with tqdm(total=total_steps, desc=text, ncols=80, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]") as pbar:
+            step_duration = duration / total_steps
+            for _ in range(total_steps):
+                if stop_animation:
+                    break
+                time.sleep(step_duration)
+                pbar.update(1)
+    else: 
+        print("Loading animation disabled, to enable set IS_ENABLED to True in animations.py")
 
 def matrix_rain(duration=5, width=100):
     """
     Matrix-like rain effect with larger width.
     Introduces random red-colored characters to simulate irregular errors.
     """
-    end_time = time.time() + duration
-    while time.time() < end_time:
-        line = ''.join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!$&()_-{}|?") for _ in range(width))
-        if random.random() < 0.05:  # 5% chance to add red-colored characters to simulate error
-            error_position = random.randint(0, width - 1)
-            line = line[:error_position] + Fore.RED + line[error_position] + Fore.GREEN + line[error_position + 1:]
-        print(Fore.GREEN + line)
-        time.sleep(0.05)
+    if IS_ENABLED:
+        end_time = time.time() + duration
+        while time.time() < end_time:
+            line = ''.join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!$&()_-{}|?") for _ in range(width))
+            if random.random() < 0.05:  # 5% chance to add red-colored characters to simulate error
+                error_position = random.randint(0, width - 1)
+                line = line[:error_position] + Fore.RED + line[error_position] + Fore.GREEN + line[error_position + 1:]
+            print(Fore.GREEN + line)
+            time.sleep(0.05)
 
 
 def glitch_line(text, glitch_prob=0.05):
@@ -91,14 +95,15 @@ def data_wave_effect(duration=5):
     Data wave effect with random numeric values.
     Occasionally introduce errors in the wave by turning some numbers red.
     """
-    end_time = time.time() + duration
-    while time.time() < end_time:
-        line = ''.join(random.choice("0123456789") for _ in range(80))
-        if random.random() < 0.1:  # 10% chance to have red error in data wave
-            error_position = random.randint(0, 79)
-            line = line[:error_position] + Fore.RED + line[error_position] + Fore.CYAN + line[error_position + 1:]
-        print(Fore.CYAN + line)
-        time.sleep(0.05)
+    if IS_ENABLED:
+        end_time = time.time() + duration
+        while time.time() < end_time:
+            line = ''.join(random.choice("0123456789") for _ in range(80))
+            if random.random() < 0.1:  # 10% chance to have red error in data wave
+                error_position = random.randint(0, 79)
+                line = line[:error_position] + Fore.RED + line[error_position] + Fore.CYAN + line[error_position + 1:]
+            print(Fore.CYAN + line)
+            time.sleep(0.05)
 
 
 def flickering_status_line(text, flicker_count=10):
@@ -160,30 +165,32 @@ def frame_effect(text, width=60):
     border = "+" + "-" * width + "+"
     
     # Print the top border
-    print(border)
+    slow_print(border)
     
     # Print each line within the frame
     for line in lines:
-        print(f"| {line:<{width - 2}} |")  # Subtract 2 for the borders on both sides
+        slow_print(f"| {line:<{width - 2}} |")  # Subtract 2 for the borders on both sides
     
     # Print the bottom border
-    print(border)
+    slow_print(border)
 
 
 def boot_sequence():
     """
     Boot sequence for the system with initial loading effects.
     """
-    slow_print("[ SYSTEM BOOT INITIATED... ]\n")
-    loading_animation("Loading Core Modules")
-    slow_print("\n[ CORE MODULES LOADED ]\n")
-    matrix_rain(duration=3, width=100)
-    slow_print("\n[ Initializing Security Protocols... ]\n")
-    flickering_status_line("Authentication System")
-    slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
-    slow_print("-" * 60)
-    slow_print(generate_footer())
-    pass
+    if IS_ENABLED:
+        slow_print("[ SYSTEM BOOT INITIATED... ]\n")
+        loading_animation("Loading Core Modules")
+        slow_print("\n[ CORE MODULES LOADED ]\n")
+        matrix_rain(duration=3, width=100)
+        slow_print("\n[ Initializing Security Protocols... ]\n")
+        flickering_status_line("Authentication System")
+        slow_print("[ ALL SYSTEMS OPERATIONAL ]\n")
+        slow_print("-" * 60)
+        slow_print(generate_footer())
+        pass
+    else: print("Boot sequence disabled, to enable set IS_ENABLED to True in animations.py")
 
 
 # Example usage for the boot sequence

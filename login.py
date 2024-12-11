@@ -1,20 +1,21 @@
-# File: login.py
 import json
 import time
 from random import choice
-from utilities import slow_print, glitch_line, loading_animation
+from animations import *
 from colorama import Fore
 from tabulate import tabulate  # Do formatowania tabel logów
+import msvcrt  # Do wykrywania naciśnięcia klawisza
 
 class Login:
     def __init__(self):
         self.users = self.load_users()
         self.failed_attempts = {}
         self.locked_users = {}
+        self.last_activity_time = time.time()  # Czas ostatniej aktywności
 
     def load_users(self):
         try:
-            with open('users.json', 'r') as f:
+            with open('data/users.json', 'r') as f:
                 return json.load(f)
         except FileNotFoundError:
             slow_print(Fore.RED + "ERROR: users.json not found!")
@@ -28,7 +29,7 @@ class Login:
 
     def save_users(self):
         try:
-            with open('users.json', 'w') as f:
+            with open('data/users.json', 'w') as f:
                 json.dump(self.users, f)
         except Exception as e:
             slow_print(Fore.RED + f"ERROR: Failed to save users data - {str(e)}")
@@ -41,14 +42,14 @@ class Login:
             "length": message_length
         }
         try:
-            with open('crypto_logs.json', 'a') as log_file:
+            with open('data/crypto_logs.json', 'a') as log_file:
                 log_file.write(json.dumps(log_entry) + "\n")
         except Exception as e:
             slow_print(Fore.RED + f"ERROR: Failed to write log - {str(e)}")
 
     def view_crypto_logs(self):
         try:
-            with open('crypto_logs.json', 'r') as log_file:
+            with open('data/crypto_logs.json', 'r') as log_file:
                 logs = [json.loads(log) for log in log_file.readlines()]
                 if logs:
                     table = [
@@ -117,14 +118,16 @@ class Login:
 
         menu_options = self.get_menu_options(user_level)
         while True:
+            self.check_inactivity()  # Check if user has been inactive for 5 minutes
+
             slow_print(Fore.YELLOW + "Available options:")
             for idx, option in enumerate(menu_options, 1):
                 slow_print(Fore.GREEN + f"{idx}. {option}")
             choice = input(Fore.YELLOW + "Choose an option (or type 'exit' to logout): ").strip().lower()
             if choice == 'exit':
-                slow_print(Fore.GREEN + "Logging out...")
-                glitch_line("User logged out. Goodbye.")
+                self.handle_exit()
                 break
+
             if choice.isdigit() and 1 <= int(choice) <= len(menu_options):
                 self.handle_option(int(choice), username)
             else:
@@ -164,7 +167,7 @@ class Login:
 
     def view_baby_ascii(self):
         try:
-            with open('baby_art.txt', 'r', encoding='utf-8') as f:  # Określenie kodowania
+            with open('data/baby_art.txt', 'r', encoding='utf-8') as f:  # Określenie kodowania
                 ascii_art = f.read().split('--splitter--')
                 selected_art = choice(ascii_art).strip()
                 slow_print(Fore.GREEN + selected_art)
@@ -199,3 +202,24 @@ class Login:
     def arm_rocket(self):
         slow_print(Fore.RED + "Arming rocket!")
         glitch_line("Rocket armed. Awaiting further commands.")
+
+    def check_inactivity(self):
+        if time.time() - self.last_activity_time > 300:  # 5 minutes in seconds
+            slow_print(Fore.YELLOW + "You have been inactive for 5 minutes. Press any key to continue...")
+            msvcrt.getch()  # Wait for key press to continue
+            self.last_activity_time = time.time()  # Reset activity timer
+            self.boot_sequence()
+
+    def handle_exit(self):
+        slow_print(Fore.YELLOW + "Press any key to continue...")
+        msvcrt.getch()  # Wait for key press to continue
+        self.last_activity_time = time.time()  # Reset activity timer
+        self.boot_sequence()
+
+    def boot_sequence(self):
+        # This method can represent the boot sequence or any intro animation
+        slow_print(Fore.GREEN + "Booting up...")
+        time.sleep(1)
+        slow_print(Fore.YELLOW + "Loading system...")
+        time.sleep(1)
+        glitch_line("SYSTEM READY.")
