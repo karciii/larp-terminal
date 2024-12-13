@@ -4,7 +4,7 @@ from random import choice
 from animations import *
 from colorama import Fore
 from tabulate import tabulate  # Do formatowania tabel logów
-import msvcrt  # Do wykrywania naciśnięcia klawisza
+import getch  # Zamiast msvcrt
 
 class Login:
     def __init__(self):
@@ -204,17 +204,18 @@ class Login:
         glitch_line("Rocket armed. Awaiting further commands.")
 
     def check_inactivity(self):
-        if time.time() - self.last_activity_time > 300:  # 5 minutes in seconds
+        if time.time() - self.last_activity_time > 300:  # 5 minut w sekundach
             slow_print(Fore.YELLOW + "You have been inactive for 5 minutes. Press any key to continue...")
-            msvcrt.getch()  # Wait for key press to continue
-            self.last_activity_time = time.time()  # Reset activity timer
+            getch.getch()  # Czekaj na naciśnięcie klawisza, aby kontynuować
+            self.last_activity_time = time.time()  # Resetuj licznik aktywności
             self.boot_sequence()
 
     def handle_exit(self):
         slow_print(Fore.YELLOW + "Press any key to continue...")
-        msvcrt.getch()  # Wait for key press to continue
-        self.last_activity_time = time.time()  # Reset activity timer
+        getch.getch()  # Czekaj na naciśnięcie klawisza, aby kontynuować
+        self.last_activity_time = time.time()  # Resetuj licznik aktywności
         self.boot_sequence()
+
 
     def boot_sequence(self):
         # This method can represent the boot sequence or any intro animation
