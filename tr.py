@@ -49,6 +49,14 @@ class BootSequence:
             sleep(0.1)
 
     @staticmethod
+    def display_logo():
+        # Display the logo with animations.
+        for line in EVIL_CORP_ASCII.splitlines():
+            print(Fore.RED, end="")
+            slow_print(Fore.RED + line, min_delay=0.001, max_delay=0.02)
+        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System")
+
+    @staticmethod
     def load_core_modules():
         # Simulate loading core modules with an animation.
         slow_print(Fore.YELLOW + "\n[ LOADING CORE MODULES... ]\n")
@@ -76,6 +84,7 @@ class BootSequence:
         # Main boot sequence logic.
         BootSequence.reset_inactivity_timer()
         BootSequence.load_core_modules()
+        BootSequence.display_logo
         BootSequence.initialize_security_protocols()
         BootSequence.run_diagnostics()
 
@@ -85,14 +94,15 @@ class BootSequence:
     @staticmethod
     def shutdown_animation():
         # Shutdown animation with a glitch effect.
-        slow_print(Fore.RED + " [ Shutting down system... ]")
+        slow_print(Fore.RED + "[ Shutting down system... ]")
         time.sleep(1)
         slow_print(Fore.GREEN + "[ SYSTEM SHUTDOWN COMPLETE ]")
         time.sleep(1)
-        slow_print(Fore.MAGENTA + "[ GOODBYE ]")
+        slow_print(Fore.WHITE + "[ GOODBYE ]")
         time.sleep(1)
-        slow_print(Fore.BLUE + "[ THANK YOU FOR USING THE EVIL CORP TERMINAL SYSTEM ]")
-        slow_print(Fore.WHITE + "[ COPYRIGHT © 2137 EVIL CORP. ALL RIGHTS RESERVED. ]")
+        BootSequence.display_logo()
+        frame_effect(Fore.BLUE + "[ THANK YOU FOR USING THE EVIL CORP TERMINAL SYSTEM ]")
+        frame_effect(Fore.WHITE + "[ COPYRIGHT © 2137 EVIL CORP. ALL RIGHTS RESERVED. ]")
         time.sleep(5)
         BootSequence.prompt_for_restart()
 
@@ -198,7 +208,7 @@ class tr:
     def start(self):
         # Start the main terminal system.
         threading.Thread(target=BootSequence.monitor_activity, daemon=True).start()
-        self.display_logo()
+        # self.display_logo()
         BootSequence.run()  # Start the boot sequence.
         frame_effect(" Type 'help' to see the list of commands. ")
         slow_print(Fore.RED + generate_footer())  # Add footer after boot.
@@ -211,12 +221,6 @@ class tr:
                 slow_print(Fore.RED + "Unknown command. Type 'help' for available commands.")
                 slow_print(generate_footer())
 
-    def display_logo(self):
-        # Display the logo with animations.
-        for line in EVIL_CORP_ASCII.splitlines():
-            print(Fore.RED, end="")
-            slow_print(Fore.RED + line, min_delay=0.001, max_delay=0.02)
-        slow_print(Fore.YELLOW + " Welcome to the EVIL CORP Terminal System")
 
     def show_help(self):
         # Display the help menu with commands.
@@ -228,19 +232,19 @@ class tr:
         | hack    : Attempt to hack into a system.                    |
         | decrypt : Decrypt secure files.                             |
         | help    : Display this help information.                    |
-        | exit    : Exit the Terminal.                                |
+        | login   : Open login menu.                                  |  
         | open_en : Access the encyclopedia.                          |
         | open_jr : Access and manage your journal entries.           |
-        | login   : Open login menu.                                  |
+        | exit    : Exit the Terminal.                                |                                         |
         +-------------------------------------------------------------+
         """
         slow_print(help_text)
 
     def exit_tr(self):
         # Exit the terminal system.
-        slow_print(Fore.RED + "Exiting the terminal system...")
+        slow_print(Fore.RED + "Exiting the terminal system... \n")
         BootSequence.shutdown_animation()
-        exit(0)
+        # exit(0)
 
     def journal_menu(self):
         # Access the journal menu.

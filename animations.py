@@ -31,31 +31,11 @@ def slow_print(text, min_delay=0.001, max_delay=0.02, end='\n'):
     else:
         print(text)
 
-
-stop_animation = False
-
-def check_for_user_input():
-    global stop_animation
-    while not stop_animation:
-        if keyboard.is_pressed('u'):
-            stop_animation = True
-            print(Fore.RED + "\n[ANIMATION INTERRUPTED]")
-            break
-        time.sleep(0.1)
-
 def loading_animation(text="Loading", duration=random.randint(3, 60), total_steps=random.randint(1, 10000)):
     if IS_ENABLED:
-        global stop_animation
-        stop_animation = False
-        listener_thread = threading.Thread(target=check_for_user_input)
-        listener_thread.daemon = True
-        listener_thread.start()
-
         with tqdm(total=total_steps, desc=text, ncols=80, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]") as pbar:
             step_duration = duration / total_steps
             for _ in range(total_steps):
-                if stop_animation:
-                    break
                 time.sleep(step_duration)
                 pbar.update(1)
     else: 
@@ -154,9 +134,9 @@ def generate_footer():
 
 
 def frame_effect(text, width=60):
-    """
-    Add frame effect around text. The frame dynamically adjusts to fit the longest line of text.
-    """
+
+    # Add frame effect around text. The frame dynamically adjusts to fit the longest line of text.
+    
     # Split the text into lines
     lines = text.split('\n')
     

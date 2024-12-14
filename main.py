@@ -3,10 +3,7 @@ from animations import slow_print
 from colorama import Fore
 
 if __name__ == "__main__":
-    try:
-        boot_instance = BootSequence()
-        boot_instance.run()  
-        
+    try:     
         terminal = tr() 
         terminal.start()  
 

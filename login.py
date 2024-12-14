@@ -1,93 +1,25 @@
-import json
 import time
 from random import choice
-from animations import *
 from colorama import Fore
-from tabulate import tabulate  # Do formatowania tabel logów
-import getch  # Zamiast msvcrt
+from tabulate import tabulate
+from animations import slow_print, glitch_line
+from user_manager import UserManager
+import base64
 
 class Login:
     def __init__(self):
-        self.users = self.load_users()
-        self.failed_attempts = {}
-        self.locked_users = {}
+        self.user_manager = UserManager()
         self.last_activity_time = time.time()  # Czas ostatniej aktywności
-
-    def load_users(self):
-        try:
-            with open('data/users.json', 'r') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            slow_print(Fore.RED + "ERROR: users.json not found!")
-            return {}
-        except json.JSONDecodeError:
-            slow_print(Fore.RED + "ERROR: Error parsing users.json!")
-            return {}
-        except Exception as e:
-            slow_print(Fore.RED + f"ERROR: {str(e)}")
-            return {}
-
-    def save_users(self):
-        try:
-            with open('data/users.json', 'w') as f:
-                json.dump(self.users, f)
-        except Exception as e:
-            slow_print(Fore.RED + f"ERROR: Failed to save users data - {str(e)}")
-
-    def log_operation(self, username, operation_type, message_length):
-        log_entry = {
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "username": username,
-            "operation": operation_type,
-            "length": message_length
-        }
-        try:
-            with open('data/crypto_logs.json', 'a') as log_file:
-                log_file.write(json.dumps(log_entry) + "\n")
-        except Exception as e:
-            slow_print(Fore.RED + f"ERROR: Failed to write log - {str(e)}")
-
-    def view_crypto_logs(self):
-        try:
-            with open('data/crypto_logs.json', 'r') as log_file:
-                logs = [json.loads(log) for log in log_file.readlines()]
-                if logs:
-                    table = [
-                        [log["timestamp"], log["username"], log["operation"], log["length"]]
-                        for log in logs
-                    ]
-                    slow_print(Fore.GREEN + tabulate(
-                        table, headers=["Timestamp", "Username", "Operation", "Message Length"], tablefmt="grid"
-                    ))
-                else:
-                    slow_print(Fore.YELLOW + "No logs available.")
-        except FileNotFoundError:
-            slow_print(Fore.RED + "No logs file found.")
-        except json.JSONDecodeError:
-            slow_print(Fore.RED + "Error reading logs file.")
-
-    def xor_encrypt(self, message):
-        key = len(message)
-        encrypted = ''.join(chr(ord(char) ^ key) for char in message)
-        return encrypted
-
-    def xor_decrypt(self, message):
-        key = len(message)
-        decrypted = ''.join(chr(ord(char) ^ key) for char in message)
-        return decrypted
 
     def login_menu(self):
         username = input(Fore.YELLOW + "Username: ").strip()
 
-        if username in self.locked_users:
-            if time.time() < self.locked_users[username]:
-                slow_print(Fore.RED + "Account is locked. Try again later.")
-                glitch_line("LOCKED: Unauthorized access detected.")
-                return
-            else:
-                del self.locked_users[username]
+        if self.user_manager.is_user_locked(username):
+            slow_print(Fore.RED + "Account is locked. Try again later.")
+            glitch_line("LOCKED: Unauthorized access detected.")
+            return
 
-        if username not in self.users:
+        if username not in self.user_manager.users:
             slow_print(Fore.RED + "User not found!")
             glitch_line("ERROR: User does not exist in the database.")
             return
@@ -95,7 +27,7 @@ class Login:
         attempts = 0
         while attempts < 3:
             password = input(Fore.YELLOW + "Password: ").strip()
-            if self.check_credentials(username, password):
+            if self.user_manager.check_credentials(username, password):
                 slow_print(Fore.GREEN + "Login successful!")
                 glitch_line("SYSTEM ACCESS GRANTED.")
                 self.show_user_menu(username)
@@ -106,88 +38,40 @@ class Login:
                 attempts += 1
 
         slow_print(Fore.RED + "Too many failed attempts. Locking account for 1 minute.")
-        self.locked_users[username] = time.time() + 60
+        self.user_manager.lock_user(username)
         glitch_line("Account temporarily locked.")
 
-    def check_credentials(self, username, password):
-        return username in self.users and self.users[username]['password'] == password
-
     def show_user_menu(self, username):
-        user_level = self.users[username]['access_level']
+        user_level = self.user_manager.users[username]['access_level']
         slow_print(Fore.GREEN + f"Welcome {username}, Access Level: {user_level}")
 
-        menu_options = self.get_menu_options(user_level)
         while True:
             self.check_inactivity()  # Check if user has been inactive for 5 minutes
 
             slow_print(Fore.YELLOW + "Available options:")
-            for idx, option in enumerate(menu_options, 1):
-                slow_print(Fore.GREEN + f"{idx}. {option}")
+            self.show_help()
             choice = input(Fore.YELLOW + "Choose an option (or type 'exit' to logout): ").strip().lower()
-            if choice == 'exit':
-                self.handle_exit()
-                break
+            self.handle_option(choice, username)
 
-            if choice.isdigit() and 1 <= int(choice) <= len(menu_options):
-                self.handle_option(int(choice), username)
-            else:
-                slow_print(Fore.RED + "Invalid choice. Please try again.")
-                glitch_line("ERROR: Invalid menu option.")
-
-    def get_menu_options(self, access_level):
-        all_options = [
-            "Zobacz gołe baby (ASCII art)",
-            "Otwórz Logi",
-            "Zaszyfruj Wiadomość",
-            "Odszyfruj Wiadomość",
-            "Zobacz logi enkrypcji",
-            "Uzbrój rakietę",
-            "Edytuj Notatki",
-        ]
-        return all_options[:access_level]
-
-    def handle_option(self, option, username):
-        if option == 1:
-            self.view_baby_ascii()
-        elif option == 2:
-            self.access_logs()
-        elif option == 3:
-            self.encrypt_message(username)
-        elif option == 4:
-            self.decrypt_message(username)
-        elif option == 5:
-            self.view_crypto_logs()
-        elif option == 6:
-            self.arm_rocket()
-        elif option == 7:
-            self.edit_notes(username)
-        else:
-            slow_print(Fore.RED + "Wybrano nieznaną opcję.")
-            glitch_line("ERROR: Niepoprawna opcja.")
-
-    def view_baby_ascii(self):
-        try:
-            with open('data/baby_art.txt', 'r', encoding='utf-8') as f:  # Określenie kodowania
-                ascii_art = f.read().split('--splitter--')
-                selected_art = choice(ascii_art).strip()
-                slow_print(Fore.GREEN + selected_art)
-        except FileNotFoundError:
-            slow_print(Fore.RED + "ERROR: baby_art.txt not found!")
-        except UnicodeDecodeError as e:
-            slow_print(Fore.RED + f"ERROR: Could not decode the file - {str(e)}")
+    def xor_encrypt(self, message):
+        key = 'secret_key'  # Możesz zmienić klucz na dowolny ciąg znaków
+        encrypted_message = ''.join(chr(ord(c) ^ ord(key[i % len(key)])) for i, c in enumerate(message))
+        return encrypted_message
 
     def encrypt_message(self, username):
         message = input(Fore.YELLOW + "Enter the message to encrypt: ").strip()
         encrypted_message = self.xor_encrypt(message)
-        slow_print(Fore.GREEN + f"Encrypted Message: {encrypted_message}")
-        self.log_operation(username, "Encryption", len(message))
+        encoded_message = base64.b64encode(encrypted_message.encode()).decode()  # Kodowanie Base64
+        slow_print(Fore.GREEN + f"Encrypted Message: {encoded_message}")
+        self.user_manager.log_operation(username, "Encryption", len(message))
 
     def decrypt_message(self, username):
-        encrypted_message = input(Fore.YELLOW + "Enter the encrypted message: ").strip()
+        encoded_message = input(Fore.YELLOW + "Enter the encrypted message: ").strip()
         try:
-            decrypted_message = self.xor_decrypt(encrypted_message)
+            encrypted_message = base64.b64decode(encoded_message.encode()).decode()  # Dekodowanie Base64
+            decrypted_message = self.xor_encrypt(encrypted_message)  # Użyj tej samej metody do deszyfrowania
             slow_print(Fore.GREEN + f"Decrypted Message: {decrypted_message}")
-            self.log_operation(username, "Decryption", len(encrypted_message))
+            self.user_manager.log_operation(username, "Decryption", len(encoded_message))
         except Exception as e:
             slow_print(Fore.RED + f"ERROR: Decryption failed - {str(e)}")
 
@@ -200,22 +84,61 @@ class Login:
         glitch_line("Logs accessed.")
 
     def arm_rocket(self):
-        slow_print(Fore.RED + "Arming rocket!")
-        glitch_line("Rocket armed. Awaiting further commands.")
+        slow_print(Fore.RED + "Arming rocket...")
+        glitch_line("Rocket armed.")
+
+    def handle_option(self, option, username):
+        options = {
+            "ascii": self.show_ascii_art,
+            "logs": self.access_logs,
+            "encrypt": self.encrypt_message,
+            "decrypt": self.decrypt_message,
+            "encryption_logs": self.show_encryption_logs,
+            "arm_rocket": self.arm_rocket,
+            "edit_notes": self.edit_notes,
+            "help": self.show_help,
+            "exit": self.handle_exit
+        }
+
+        if option in options:
+            options[option](username)
+        else:
+            slow_print(Fore.RED + "Invalid option.")
+
+    def show_help(self, username=None):
+        help_text = """
+        +-------------------------------------------------------------+
+        |                       Available Commands                    |
+        +-------------------------------------------------------------+
+        | ascii          : Zobacz ASCII art                           |
+        | logs           : Otwórz Logi                                |
+        | encrypt        : Zaszyfruj Wiadomość                        |
+        | decrypt        : Odszyfruj Wiadomość                        |
+        | encryption_logs: Zobacz logi enkrypcji                      |
+        | arm_rocket     : Uzbrój rakietę                             |
+        | edit_notes     : Edytuj Notatki                             |
+        | help           : Display this help information              |
+        | exit           : Exit the menu                              |
+        +-------------------------------------------------------------+
+        """
+        slow_print(help_text)
+
+    def show_ascii_art(self, username=None):
+        slow_print(Fore.GREEN + "Zobacz ASCII art")
+
+    def show_encryption_logs(self, username=None):
+        slow_print(Fore.GREEN + "Zobacz logi enkrypcji")
 
     def check_inactivity(self):
         if time.time() - self.last_activity_time > 300:  # 5 minut w sekundach
-            slow_print(Fore.YELLOW + "You have been inactive for 5 minutes. Press any key to continue...")
-            getch.getch()  # Czekaj na naciśnięcie klawisza, aby kontynuować
+            slow_print(Fore.YELLOW + "You have been inactive for 5 minutes.")
             self.last_activity_time = time.time()  # Resetuj licznik aktywności
             self.boot_sequence()
 
     def handle_exit(self):
-        slow_print(Fore.YELLOW + "Press any key to continue...")
-        getch.getch()  # Czekaj na naciśnięcie klawisza, aby kontynuować
+        slow_print(Fore.YELLOW + "Exiting...")
         self.last_activity_time = time.time()  # Resetuj licznik aktywności
         self.boot_sequence()
-
 
     def boot_sequence(self):
         # This method can represent the boot sequence or any intro animation
