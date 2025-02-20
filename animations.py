@@ -7,7 +7,7 @@ import threading
 import keyboard  # Make sure to install this package
 import re
 
-IS_ENABLED = True
+IS_ENABLED = False
 
 
 def slow_print(text, min_delay=0.001, max_delay=0.02, end='\n'):

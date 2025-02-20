@@ -89,6 +89,17 @@ class Encyclopedia:
 
         slow_print(table_header)
 
+    def view_all_entries(self):
+        try:
+            with open(self.data_file, 'r') as file:
+                entries = json.load(file)
+                for entry in entries:
+                    print(f"Title: {entry['title']}\nContent: {entry['content']}\n")
+        except FileNotFoundError:
+            slow_print("The encyclopedia data file was not found.")
+        except json.JSONDecodeError:
+        slow_print("Error decoding the encyclopedia data file.")
+
     def highlight_text(self, text, keyword):
         """Highlights the keyword in the given text."""
         return text.replace(keyword, Fore.RED + keyword + Fore.RESET)

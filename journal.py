@@ -2,7 +2,7 @@ import json
 import pyttsx3
 from colorama import Fore
 from animations import slow_print, frame_effect
-
+import objc 
 
 class Journal:
     """Handles the player's journal system with histories."""
@@ -43,16 +43,24 @@ class Journal:
     def journal_menu(self):
         """Displays the journal menu."""
         while True:
-            frame_effect(" Journal Menu ", width=60)
-            slow_print(" 1. View Entries ")
-            slow_print(" 2. Add Entry ")
-            slow_print(" 3. Return to Main Menu ")
-            choice = input(Fore.GREEN + "> ").strip()
-            if choice == "1":
+            journal_menu = '''
+            +----------------------------------------------------------+
+            |                       Journal Menu                       |
+            +----------------------------------------------------------+
+            | wpisy: Przeglądaj istniejące wpisy w dzienniku.          |
+            | dodaj: Dodaj nowy wpis do dziennika.                     |
+            | wyjdz: Powrót do menu głównego.                          |
+            +----------------------------------------------------------+    
+            '''
+            slow_print(Fore.CYAN + journal_menu)
+
+            choice = input(Fore.GREEN + "Wybierz opcję: ").strip().lower()
+
+            if choice == "wpisy":
                 self.view_entries()
-            elif choice == "2":
+            elif choice == "dodaj":
                 self.add_entry()
-            elif choice == "3":
+            elif choice == "wyjdz":
                 break
             else:
                 self.speak_text("Invalid choice. Please try again.")

@@ -5,6 +5,7 @@ from tabulate import tabulate
 from animations import slow_print, glitch_line
 from user_manager import UserManager
 import base64
+from journal import Journal
 
 class Login:
     def __init__(self):
@@ -97,7 +98,8 @@ class Login:
             "arm_rocket": self.arm_rocket,
             "edit_notes": self.edit_notes,
             "help": self.show_help,
-            "exit": self.handle_exit
+            "exit": self.handle_exit,
+            "open_jr": self.journal_menu
         }
 
         if option in options:
@@ -117,6 +119,7 @@ class Login:
         | encryption_logs: Zobacz logi enkrypcji                      |
         | arm_rocket     : Uzbrój rakietę                             |
         | edit_notes     : Edytuj Notatki                             |
+        | open_jr        : Access and manage your journal entries.    |
         | help           : Display this help information              |
         | exit           : Exit the menu                              |
         +-------------------------------------------------------------+
@@ -128,6 +131,12 @@ class Login:
 
     def show_encryption_logs(self, username=None):
         slow_print(Fore.GREEN + "Zobacz logi enkrypcji")
+
+
+    def journal_menu(self, username):
+        # Access the journal menu.
+        journal = Journal()
+        journal.journal_menu()
 
     def check_inactivity(self):
         if time.time() - self.last_activity_time > 300:  # 5 minut w sekundach

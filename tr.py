@@ -201,14 +201,13 @@ class tr:
             "help": self.show_help,
             "exit": self.exit_tr,
             "open_en": Encyclopedia().menu,
-            "open_jr": self.journal_menu,
             "login": self.login,
         }
 
     def start(self):
         # Start the main terminal system.
         threading.Thread(target=BootSequence.monitor_activity, daemon=True).start()
-        # self.display_logo()
+        BootSequence.display_logo()
         BootSequence.run()  # Start the boot sequence.
         frame_effect(" Type 'help' to see the list of commands. ")
         slow_print(Fore.RED + generate_footer())  # Add footer after boot.
@@ -230,11 +229,10 @@ class tr:
         +-------------------------------------------------------------+
         | scan    : Perform a scan of the surrounding area.           |
         | hack    : Attempt to hack into a system.                    |
-        | decrypt : Decrypt secure files.                             |
+        | decrypt : Decrypt secure messages                           |
         | help    : Display this help information.                    |
         | login   : Open login menu.                                  |  
         | open_en : Access the encyclopedia.                          |
-        | open_jr : Access and manage your journal entries.           |
         | exit    : Exit the Terminal.                                |                                         |
         +-------------------------------------------------------------+
         """
@@ -245,11 +243,6 @@ class tr:
         slow_print(Fore.RED + "Exiting the terminal system... \n")
         BootSequence.shutdown_animation()
         # exit(0)
-
-    def journal_menu(self):
-        # Access the journal menu.
-        journal = Journal()
-        journal.journal_menu()
 
     def login(self):
         # Open the login menu.
