@@ -9,8 +9,14 @@ import re
 
 IS_ENABLED = True  # Global flag to enable or disable animations
 
+def very_slow_print(text, delay=0.1):
+    """Wyświetla tekst znak po znaku z większym opóźnieniem."""
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(delay)
+    print()  # Dodaj nową linię po zakończeniu
 
-def slow_print(text, min_delay=0.001, max_delay=0.02, end='\n'):
+def slow_print(text, min_delay=0.001, max_delay=0.025, end='\n'):
     """
     Enhanced slow print with proper handling of ANSI escape sequences.
     """

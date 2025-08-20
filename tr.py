@@ -3,10 +3,12 @@ import time
 import sys
 import threading
 import keyboard
+import os
+import pygame  # Upewnij się, że biblioteka pygame jest zainstalowana: pip install pygame
 from time import sleep
 from colorama import Fore, Style, init
 from data.ascii_art import EVIL_CORP_ASCII, FOOTER_TEMPLATE
-from animations import slow_print, glitch_line, loading_animation, data_wave_effect, generate_footer, flickering_status_line, matrix_rain, frame_effect
+from animations import very_slow_print ,slow_print, glitch_line, loading_animation, data_wave_effect, generate_footer, flickering_status_line, matrix_rain, frame_effect
 from encyclopedia import Encyclopedia
 from journal import Journal
 from login import Login
@@ -276,7 +278,7 @@ class trCommands:
                 flickering_status_line("[SUCCESS] Entity banished successfully.")
                 loading_animation(" Finalizing exorcism ", duration=20)
                 glitch_line(" Entity banished successfully! ", glitch_prob=0.4)
-                slow_print(Fore.MAGENTA + narrative)
+                very_slow_print(Fore.MAGENTA + narrative)
                 break  # Przerwij pętlę, gdy egzorcyzm się powiedzie
             else:
                 slow_print(Fore.RED + " Exorcism failed! Retrying... ")
@@ -292,6 +294,54 @@ class trCommands:
         # Zakończenie
         slow_print(generate_footer())
 
+    @staticmethod
+    def junkbox():
+        music_folder = "music"
+        
+        # Sprawdź, czy folder istnieje
+        if not os.path.exists(music_folder):
+            print(Fore.RED + f"Error: Folder '{music_folder}' does not exist.")
+            return
+
+        # Pobierz listę plików w folderze
+        music_files = [f for f in os.listdir(music_folder) if f.endswith(('.mp3', '.wav', '.ogg'))]
+
+        if not music_files:
+            print(Fore.YELLOW + "No music files found in the folder.")
+            return
+
+        # Wyświetl listę plików
+        print(Fore.CYAN + "\nAvailable Music Files:")
+        for idx, file in enumerate(music_files, start=1):
+            print(Fore.GREEN + f"{idx}. {file}")
+
+        # Poproś użytkownika o wybór pliku
+        try:
+            choice = int(input(Fore.YELLOW + "\nEnter the number of the file to play: ").strip())
+            if choice < 1 or choice > len(music_files):
+                print(Fore.RED + "Invalid choice. Please select a valid number.")
+                return
+
+            selected_file = music_files[choice - 1]
+            file_path = os.path.join(music_folder, selected_file)
+
+            # Odtwórz wybrany plik
+            print(Fore.GREEN + f"Playing: {selected_file}")
+            pygame.mixer.init()
+            pygame.mixer.music.load(file_path)
+            pygame.mixer.music.play()
+
+            # Poczekaj, aż muzyka się zakończy
+            while pygame.mixer.music.get_busy():
+                continue
+
+            print(Fore.CYAN + "Playback finished.")
+
+        except ValueError:
+            print(Fore.RED + "Invalid input. Please enter a number.")
+        except Exception as e:
+            print(Fore.RED + f"An error occurred: {e}")
+
 class tr:
     def __init__(self):
         # Initialize command mappings.
@@ -304,6 +354,7 @@ class tr:
             "open_en": Encyclopedia().menu,
             "login": self.login,
             "exorcism": trCommands.exorcism,
+            "junkbox": trCommands.junkbox,
         }
 
     def start(self):
@@ -333,8 +384,8 @@ class tr:
         | help    : Display this help information.                    |
         | login   : Open login menu.                                  |  
         | open_en : Access the encyclopedia.                          |
-        | exit    : Exit the Terminal.                                |   
-        |                                                             |
+        | junkbox : Play music.                                       |   
+        | exit    : Exit the Terminal.                                |
         +-------------------------------------------------------------+
         """
         slow_print(help_text)
