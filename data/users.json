@@ -4,12 +4,16 @@
         "access_level": 8
     },
     "user1": {
-        "password": "user1pass",
-        "access_level": 3
+        "password": "guest",
+        "access_level": 2
     },
     "user2": {
-        "password": "user2pass",
-        "access_level": 2
+        "password": "ananas",
+        "access_level": 3
+    },
+    "userMAX": {
+        "password": "papaj",
+        "access_level": 5
     },
     "guest": {
         "password": "guestpass",

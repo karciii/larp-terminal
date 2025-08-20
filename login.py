@@ -46,11 +46,35 @@ class Login:
         user_level = self.user_manager.users[username]['access_level']
         slow_print(Fore.GREEN + f"Welcome {username}, Access Level: {user_level}")
 
+        # Opcje dostępne dla różnych poziomów dostępu
+        options = {
+            "ascii": "Zobacz ASCII art",
+            "logs": "Otwórz Logi",
+            "encrypt": "Zaszyfruj Wiadomość",
+            "decrypt": "Odszyfruj Wiadomość",
+            "edit_notes": "Edytuj Notatki",
+            "help": "Display this help information",
+            "exit": "Exit the menu",
+            "db": "Baza Danych"
+        }
+
+        # Ograniczenia dostępu w zależności od poziomu użytkownika
+        if user_level == 2:
+            allowed_options = {"ascii", "logs", "exit"}
+        elif user_level == 8:  # Admin
+            allowed_options = set(options.keys())
+        else:
+            allowed_options = {"help", "exit"}  # Domyślne opcje dla innych poziomów
+
         while True:
             self.check_inactivity()  # Check if user has been inactive for 5 minutes
 
+            # Wyświetl dostępne opcje
             slow_print(Fore.YELLOW + "Available options:")
-            self.show_help()
+            for option, description in options.items():
+                if option in allowed_options:
+                    slow_print(Fore.CYAN + f"- {option}: {description}")
+
             choice = input(Fore.YELLOW + "Choose an option (or type 'exit' to logout): ").strip().lower()
             self.handle_option(choice, username)
 
@@ -86,6 +110,9 @@ class Login:
 
 
     def handle_option(self, option, username):
+        user_level = self.user_manager.users[username]['access_level']
+
+        # Opcje dostępne dla różnych poziomów dostępu
         options = {
             "ascii": self.show_ascii_art,
             "logs": self.access_logs,
@@ -97,10 +124,18 @@ class Login:
             "db": self.journal_menu
         }
 
-        if option in options:
+        # Ograniczenia dostępu w zależności od poziomu użytkownika
+        if user_level == 2:
+            allowed_options = {"ascii", "logs"}
+        elif user_level == 8:  # Admin
+            allowed_options = set(options.keys())
+        else:
+            allowed_options = {"help", "exit"}  # Domyślne opcje dla innych poziomów
+
+        if option in allowed_options:
             options[option](username)
         else:
-            slow_print(Fore.RED + "Invalid option.")
+            slow_print(Fore.RED + "You do not have permission to access this option.")
 
     def show_help(self, username=None):
         help_text = """
