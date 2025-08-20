@@ -1,5 +1,6 @@
 import random
 import time
+import sys
 import threading
 import keyboard
 from time import sleep
@@ -305,7 +306,8 @@ class tr:
         | help    : Display this help information.                    |
         | login   : Open login menu.                                  |  
         | open_en : Access the encyclopedia.                          |
-        | exit    : Exit the Terminal.                                |                                         
+        | exit    : Exit the Terminal.                                |   
+        |                                                             |
         +-------------------------------------------------------------+
         """
         slow_print(help_text)
@@ -314,7 +316,7 @@ class tr:
         # Exit the terminal system.
         slow_print(Fore.RED + "Exiting the terminal system... \n")
         BootSequence.shutdown_animation()
-        # exit(0)
+        sys.exit(0)
 
     def login(self):
         # Open the login menu.
