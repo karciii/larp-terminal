@@ -6,6 +6,8 @@ from animations import slow_print, glitch_line
 from user_manager import UserManager
 import base64
 from journal import Journal
+import sys
+import random
 
 class Login:
     def __init__(self):
@@ -70,10 +72,10 @@ class Login:
             self.check_inactivity()  # Check if user has been inactive for 5 minutes
 
             # Wyświetl dostępne opcje
-            slow_print(Fore.YELLOW + "Available options:")
-            for option, description in options.items():
-                if option in allowed_options:
-                    slow_print(Fore.CYAN + f"- {option}: {description}")
+            slow_print(Fore.YELLOW + "Type 'help' to see available options.")
+            # for option, description in options.items():
+            #     if option in allowed_options:
+            #         slow_print(Fore.CYAN + f"- {option}: {description}")
 
             choice = input(Fore.YELLOW + "Choose an option (or type 'exit' to logout): ").strip().lower()
             self.handle_option(choice, username)
@@ -105,57 +107,120 @@ class Login:
         glitch_line("Notes opened for modification.")
 
     def access_logs(self, username):
-        slow_print(Fore.GREEN + "Accessing logs.")
+        slow_print(Fore.GREEN + "Accessing logs...")
         glitch_line("Logs accessed.")
 
+        # Lista losowych komunikatów do wyświetlenia
+        random_logs = [
+            "User authentication successful.",
+            "System diagnostics completed.",
+            "Unauthorized access attempt detected.",
+            "File 'config.sys' modified.",
+            "Backup completed successfully.",
+            "Error: Connection to server lost.",
+            "Log entry: User 'admin' logged in.",
+            "Warning: Disk space running low.",
+            "Process 'daemon.exe' terminated.",
+            "New user 'guest' created.",
+            "Firewall rules updated.",
+            "Critical error: Memory overflow detected."
+        ]
+
+        # Wyświetl losowe komunikaty przez kilka sekund
+        start_time = time.time()
+        while time.time() - start_time < 5:  # Wyświetlaj przez 5 sekund
+            log = random.choice(random_logs)
+            slow_print(Fore.YELLOW + log)
+            time.sleep(0.5)  # Odstęp między komunikatami
+
+        # Odczyt logów z pliku crypto_logs.json
+        try:
+            file_path = "data/crypto_logs.json"
+            with open(file_path, "r", encoding="utf-8") as file:
+                logs = file.readlines()  # Wczytaj logi jako listę wierszy
+
+            slow_print(Fore.CYAN + "\nCrypto Logs:")
+            for log in logs[-10:]:  # Wyświetl ostatnie 10 logów
+                slow_print(Fore.WHITE + log.strip())
+
+        except FileNotFoundError:
+            slow_print(Fore.RED + f"Error: The file '{file_path}' was not found.")
+        except Exception as e:
+            slow_print(Fore.RED + f"An unexpected error occurred: {e}")
 
     def handle_option(self, option, username):
         user_level = self.user_manager.users[username]['access_level']
 
-        # Opcje dostępne dla różnych poziomów dostępu
+        # Opcje dostępne dla wszystkich poziomów dostępu
         options = {
-            "ascii": self.show_ascii_art,
-            "logs": self.access_logs,
-            "encrypt": self.encrypt_message,
-            "decrypt": self.decrypt_message,
-            "edit_notes": self.edit_notes,
-            "help": self.show_help,
-            "exit": self.handle_exit,
-            "db": self.journal_menu
+            "ascii": (self.show_ascii_art, 2),
+            "logs": (self.access_logs, 2),
+            "encrypt": (self.encrypt_message, 5),
+            "decrypt": (self.decrypt_message, 5),
+            "edit_notes": (self.edit_notes, 8),
+            "help": (self.show_help, 1),
+            "exit": (self.handle_exit, 1),
+            "db": (self.journal_menu, 5)
         }
 
-        # Ograniczenia dostępu w zależności od poziomu użytkownika
-        if user_level == 2:
-            allowed_options = {"ascii", "logs"}
-        elif user_level == 8:  # Admin
-            allowed_options = set(options.keys())
+        if option in options:
+            action, required_level = options[option]
+            if user_level >= required_level:
+                action(username)
+            else:
+                slow_print(Fore.RED + "You do not have permission to access this option.")
         else:
-            allowed_options = {"help", "exit"}  # Domyślne opcje dla innych poziomów
-
-        if option in allowed_options:
-            options[option](username)
-        else:
-            slow_print(Fore.RED + "You do not have permission to access this option.")
+            slow_print(Fore.RED + "Invalid option. Please try again.")
 
     def show_help(self, username=None):
+        user_level = self.user_manager.users[username]['access_level']
+
+        # Opcje dostępne dla wszystkich poziomów dostępu
+        options = {
+            "ascii": ("Zobacz ASCII art", 2),
+            "logs": ("Otwórz Logi", 2),
+            "encrypt": ("Zaszyfruj Wiadomość", 5),
+            "decrypt": ("Odszyfruj Wiadomość", 5),
+            "edit_notes": ("Edytuj Notatki", 8),
+            "db": ("Baza Danych", 5),
+            "help": ("Display this help information", 1),
+            "exit": ("Exit the menu", 1),
+        }
+
+        # Filtrowanie opcji na podstawie poziomu dostępu
         help_text = """
         +-------------------------------------------------------------+
         |                       Available Commands                    |
         +-------------------------------------------------------------+
-        | ascii          : Zobacz ASCII art                           |
-        | logs           : Otwórz Logi                                |
-        | db             : Baza Danych                                |
-        | encrypt        : Zaszyfruj Wiadomość                        |
-        | decrypt        : Odszyfruj Wiadomość                        |
-        | edit_notes     : Edytuj Notatki                             |
-        | help           : Display this help information              |
-        | exit           : Exit the menu                              |
-        +-------------------------------------------------------------+
-        """
+"""
+        for option, (description, required_level) in options.items():
+            if user_level >= required_level:
+                help_text += f"        | {option:<12}: {description:<45} |\n"
+
+        help_text += "        +-------------------------------------------------------------+"
         slow_print(help_text)
 
     def show_ascii_art(self, username=None):
-        slow_print(Fore.GREEN + "Zobacz ASCII art")
+        try:
+            # Ścieżka do pliku z grafikami
+            file_path = "data/baby_art.txt"
+
+            # Wczytaj zawartość pliku i podziel na grafiki
+            with open(file_path, "r", encoding="utf-8") as file:
+                art_sections = file.read().split("--splitter--")
+
+            # Wyświetl losowe grafiki
+            while True:
+                random_art = random.choice(art_sections)  # Wybierz losową grafikę
+                slow_print(Fore.GREEN + random_art.strip())  # Wyświetl grafikę
+                user_input = input(Fore.YELLOW + "Press Enter to see another art or type 'exit' to return: ").strip().lower()
+                if user_input == "exit":
+                    break
+
+        except FileNotFoundError:
+            slow_print(Fore.RED + "Error: The file 'baby_art.txt' was not found.")
+        except Exception as e:
+            slow_print(Fore.RED + f"An unexpected error occurred: {e}")
 
     def journal_menu(self, username):
         # Access the journal menu.
@@ -163,10 +228,14 @@ class Login:
         journal.journal_menu(username)
 
     def check_inactivity(self):
-        if time.time() - self.last_activity_time > 300:  # 5 minut w sekundach
-            slow_print(Fore.YELLOW + "You have been inactive for 5 minutes.")
-            self.last_activity_time = time.time()  # Resetuj licznik aktywności
-            self.boot_sequence()
+        """Sprawdza, czy użytkownik był nieaktywny przez 5 minut."""
+        current_time = time.time()
+        inactivity_limit = 5 * 60  # 5 minut w sekundach
+
+        if current_time - self.last_activity_time > inactivity_limit:
+            slow_print(Fore.RED + "Session timed out due to inactivity.")
+            glitch_line("SYSTEM SHUTDOWN: User inactive for too long.")
+            sys.exit(0)  # Zakończ program
 
     def handle_exit(self):
         slow_print(Fore.YELLOW + "Exiting...")

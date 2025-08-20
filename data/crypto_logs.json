@@ -4,3 +4,4 @@
 {"timestamp": "2024-12-11 15:03:13", "username": "admin", "operation": "Decryption", "length": 1}
 {"timestamp": "2025-08-18 10:56:26", "username": "admin", "operation": "Encryption", "length": 3}
 {"timestamp": "2025-08-18 10:56:38", "username": "admin", "operation": "Decryption", "length": 4}
+{"timestamp": "2025-08-20 20:08:48", "username": "userMAX", "operation": "Encryption", "length": 3}
