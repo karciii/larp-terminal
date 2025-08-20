@@ -230,7 +230,6 @@ class trCommands:
         Ja zaś jestem świadkiem mordu duszy człowieczej —
         i nie zamilknę.
         """
-        
 
         # Pętla symulująca wielokrotne próby egzorcyzmu
         attempt = 0  # attempt counter
@@ -238,29 +237,57 @@ class trCommands:
             attempt += 1
             slow_print(Fore.YELLOW + f" Attempt {attempt}: Performing exorcism... ")
             loading_animation(" Channeling energy ", duration=3)
+
+            # Dodanie glitchy i błędów
             glitch_line(" Disturbance detected... Amplifying signal... ", glitch_prob=0.2)
             glitch_line(" Entity resisting... Increasing power... ", glitch_prob=0.3)
             glitch_line(" Reality distortion detected... Stabilizing field... ", glitch_prob=0.25)
-            glitch_line(" Paranormal interference... Adjusting parameters... ", glitch_prob=0.3)
-            glitch_line(" Energy surge detected... Redirecting flow... ", glitch_prob=0.2)
+            flickering_status_line("[CRITICAL] Energy surge detected... Redirecting flow...")
             glitch_line(" Entity attempting to escape... Containment protocols engaged... ", glitch_prob=0.35)
-            glitch_line(" Signal corruption detected... Recalibrating frequencies... ", glitch_prob=0.3)
+            flickering_status_line("[ERROR] Signal corruption detected... Recalibrating frequencies...")
             glitch_line(" Dimensional rift detected... Sealing breach... ", glitch_prob=0.4)
-            glitch_line(" Entity's resistance intensifies... Increasing output... ", glitch_prob=0.3)
-            glitch_line(" Temporal anomaly detected... Synchronizing time flow... ", glitch_prob=0.25)
+            flickering_status_line("[WARNING] Temporal anomaly detected... Synchronizing time flow...")
             glitch_line(" Entity's presence destabilizing... Reinforcing barriers... ", glitch_prob=0.3)
             glitch_line(" Unknown energy signature detected... Analyzing... ", glitch_prob=0.2)
-            glitch_line(" Entity attempting to corrupt system... Activating failsafe... ", glitch_prob=0.35)
+            flickering_status_line("[CRITICAL] Entity attempting to corrupt system... Activating failsafe...")
+            flickering_status_line("[WARNING] Unstable energy field detected... Increasing containment strength...")
+            glitch_line(" System overload imminent... Redirecting power... ", glitch_prob=0.3)
+            flickering_status_line("[ERROR] Containment field integrity compromised... Attempting repair...")
+            glitch_line(" Unknown anomaly detected in dimensional rift... Investigating... ", glitch_prob=0.25)
+            flickering_status_line("[WARNING] High energy fluctuations detected... Monitoring closely...")
+            glitch_line(" Entity attempting to breach containment... Reinforcing barriers... ", glitch_prob=0.35)
+            flickering_status_line("[ERROR] Critical system failure detected... Restarting subsystems...")
+            glitch_line(" Temporal distortion increasing... Stabilizing time flow... ", glitch_prob=0.3)
+            flickering_status_line("[WARNING] Unauthorized access attempt detected... Locking system...")
+            glitch_line(" Entity's resistance intensifies... Increasing output power... ", glitch_prob=0.4)
+            flickering_status_line("[CRITICAL] Core system instability detected... Activating emergency protocols...")
+            glitch_line(" Unknown interference detected in energy matrix... Recalibrating... ", glitch_prob=0.3)
+            flickering_status_line("[ERROR] Memory corruption detected... Attempting recovery...")
+            glitch_line(" Dimensional rift expanding... Sealing breach... ", glitch_prob=0.4)
+            flickering_status_line("[WARNING] System resources critically low... Prioritizing essential functions...")
 
             # Losowy wynik dla każdej próby
-            success = random.random() > 0.7  # 30% szans na sukces w każdej próbie
+            success = random.random() > 0.5
             if success:
                 slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
+                slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
+                slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
+                slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
+                flickering_status_line("[SUCCESS] Entity banished successfully.")
+                loading_animation(" Finalizing exorcism ", duration=20)
                 glitch_line(" Entity banished successfully! ", glitch_prob=0.4)
                 slow_print(Fore.MAGENTA + narrative)
                 break  # Przerwij pętlę, gdy egzorcyzm się powiedzie
             else:
                 slow_print(Fore.RED + " Exorcism failed! Retrying... ")
+                flickering_status_line("[ERROR] Exorcism attempt failed. Retrying...")
+
+        # Wyświetlanie ASCII art na zakończenie
+        from data.ascii_art import EVIL_CORP_ASCII
+        slow_print(Fore.CYAN + "\n[ FINALIZING EXORCISM PROTOCOL... ]\n")
+        loading_animation(" Finalizing ", duration=3)
+        slow_print(Fore.GREEN + " Exorcism complete. Displaying final message:\n")
+        slow_print(Fore.MAGENTA + EVIL_CORP_ASCII)
 
         # Zakończenie
         slow_print(generate_footer())

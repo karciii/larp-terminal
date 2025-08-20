@@ -90,15 +90,18 @@ class Encyclopedia:
         slow_print(table_header)
 
     def view_all_entries(self):
+        """Displays all entries in the encyclopedia."""
         try:
-            with open(self.data_file, 'r') as file:
+            with open(self.ENCYCLOPEDIA_FILE, 'r', encoding="utf-8") as file:
                 entries = json.load(file)
-                for entry in entries:
-                    print(f"Title: {entry['title']}\nContent: {entry['content']}\n")
+                for category, category_entries in entries.items():
+                    slow_print(Fore.YELLOW + f"\nCategory: {category.capitalize()}")
+                    for entry_name, entry_details in category_entries.items():
+                        slow_print(Fore.CYAN + f" - {entry_name.capitalize()}: {entry_details.get('opis', 'No description available')}")
         except FileNotFoundError:
-            slow_print("The encyclopedia data file was not found.")
+            slow_print(Fore.RED + "The encyclopedia data file was not found.")
         except json.JSONDecodeError:
-            slow_print("Error decoding the encyclopedia data file.")
+            slow_print(Fore.RED + "Error decoding the encyclopedia data file.")
 
     def highlight_text(self, text, keyword):
         """Highlights the keyword in the given text."""
