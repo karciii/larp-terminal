@@ -4,6 +4,9 @@ import random
 from colorama import Fore
 from animations import slow_print, frame_effect
 import objc 
+import shutil
+import subprocess
+import sys
 
 class Journal:
     """Handles the player's journal system with histories."""
@@ -12,8 +15,14 @@ class Journal:
 
     def __init__(self):
         self.entries = self.load_entries()
-        # self.tts_engine = pyttsx3.init()
-        self.configure_tts()
+        self._tts_backend = None
+        # wybierz backend TTS
+        if sys.platform.startswith("linux") and shutil.which("espeak"):
+            self._tts_backend = "espeak"
+        elif sys.platform.startswith("win") and shutil.which("powershell"):
+            self._tts_backend = "powershell"
+        else:
+            self._tts_backend = None  # brak TTS, fallback -> print
 
     def configure_tts(self):
         """Configures the TTS engine with a more robotic voice."""
@@ -37,8 +46,22 @@ class Journal:
         # self.tts_engine.setProperty('volume', 0.9)  # Volume at 90%
 
     def speak_text(self, text):
-        """Displays the text instead of reading it aloud."""
-        slow_print(Fore.CYAN + text)
+        """Cross-platform minimal TTS: espeak on Linux, PowerShell on Windows, else print."""
+        if self._tts_backend == "espeak":
+            try:
+                subprocess.run(["espeak", "--stdin"], input=text.encode("utf-8"), check=False)
+            except Exception:
+                slow_print(Fore.CYAN + text)
+        elif self._tts_backend == "powershell":
+            # prosty PowerShell TTS (Windows) — optional
+            try:
+                ps_cmd = f"Add-Type –AssemblyName System.speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text.replace(\"'\",\"\\''")}')"
+                subprocess.run(["powershell", "-Command", ps_cmd], check=False)
+            except Exception:
+                slow_print(Fore.CYAN + text)
+        else:
+            # fallback: nie ma TTS — tylko wypisz
+            slow_print(Fore.CYAN + text)
 
     def journal_menu(self, username):
         while True:
