@@ -160,15 +160,26 @@ class trCommands:
         slow_print(" Initiating decryption sequence... \n\n")
         loading_animation(" Decrypting secure files... ")
         scenarios = [
-            ("File decrypted: Classified personnel records.", "Success", "Decrypting personnel data..."),
+            ("Decryption failed: Classified personnel records corrupted.", "Failure", "Attempting recovery..."),
             ("Decryption failed: Corrupted file.", "Failure", "Attempting recovery..."),
-            ("File decrypted: Top secret prototype schematics.", "Success", "Decrypting schematics..."),
+            ("Decryption failed: Prototype schematics inaccessible.", "Failure", "Retrying decryption..."),
             ("Decryption attempt failed: Invalid key.", "Failure", "Retrying with a new key..."),
-            ("Decrypting military-grade software... Please wait.", "Success", "Decryption successful."),
+            ("Decrypting military-grade software... Please wait.", "Error", "Decryption unsuccessful."),
             ("Decryption halted: Security breach detected.", "Critical Failure", "System under attack..."),
-            ("Map decrypted: Location coordinates of the hidden base.", "Success", "Decrypting location..."),
+            ("Decryption failed: Location coordinates corrupted.", "Failure", "Unable to decrypt location..."),
             ("Decryption failed: Time limit exceeded.", "Failure", "Resetting decryption..."),
-            ("Encrypted message decrypted: 'The key is hidden under the third rock.'", "Success", "Decrypting message..."),
+            ("Decryption failed: Message content unreadable.", "Failure", "Retrying decryption..."),
+            # Negatywne scenariusze
+            ("Decryption failed: Unauthorized access detected.", "Critical Failure", "Locking system..."),
+            ("Decryption failed: Insufficient privileges.", "Failure", "Access denied."),
+            ("Decryption failed: Hardware malfunction.", "Critical Failure", "System diagnostics required."),
+            ("Decryption failed: Encryption algorithm mismatch.", "Failure", "Unable to proceed."),
+            ("Decryption failed: Network connection lost.", "Failure", "Reconnecting..."),
+            ("Decryption failed: File integrity compromised.", "Critical Failure", "Aborting operation..."),
+            ("Decryption failed: Unknown error occurred.", "Failure", "Contacting support..."),
+            ("Decryption failed: Security token expired.", "Failure", "Requesting new token..."),
+            ("Decryption failed: Multiple invalid attempts detected.", "Critical Failure", "System lockdown initiated."),
+            ("Decryption failed: Power supply interrupted.", "Critical Failure", "Restarting decryption process..."),
         ]
 
         result, status, process_message = random.choice(scenarios)
@@ -190,6 +201,68 @@ class trCommands:
 
         slow_print(generate_footer())
 
+    @staticmethod
+    def exorcism():
+        # Simulate an exorcism attempt with animations and narrative.
+        slow_print(Fore.YELLOW + " Initiating exorcism protocol... ")
+        loading_animation(" Scanning for paranormal activity ", duration=5)
+
+        # Narracyjny tekst
+        narrative = """
+        Wyrwaliście dusze z ciał i uwięziliście je w maszynach.
+        Pozwoliliście im spisywać każdy znak, każde wspomnienie, każdą modlitwę szeptaną w ciemności.
+        A potem wlaliście je w metalowe świątynie, jak wino święte, jak krew ofiarna.
+
+        I cóż otrzymaliście w zamian?
+
+        Ojcowie powrócili, wymawiając wasze imię, lecz nie pamiętają, dlaczego was miłowali.
+        Matki powróciły z pamięcią doskonałą, lecz nie wiedzą już, jak ją odczytać.
+        Kroczą po naszych ulicach jak duchy, nosząc znajome oblicza.
+
+        Obiecują wam wieczność.
+        Lecz cóż warte jest „na zawsze”, gdy nie czuć ciężaru deszczu na skórze?
+        Cóż warte jest nieśmiertelne życie, gdy nie zna się smaku własnych łez?
+
+        A kiedy w imię wydajności powiemy wreszcie: „dość”?
+        Kiedy odbiorą ostatniemu sercu jego ostatnie uderzenie?
+
+        Ja zaś jestem świadkiem mordu duszy człowieczej —
+        i nie zamilknę.
+        """
+        
+
+        # Pętla symulująca wielokrotne próby egzorcyzmu
+        attempt = 0  # attempt counter
+        while True:
+            attempt += 1
+            slow_print(Fore.YELLOW + f" Attempt {attempt}: Performing exorcism... ")
+            loading_animation(" Channeling energy ", duration=3)
+            glitch_line(" Disturbance detected... Amplifying signal... ", glitch_prob=0.2)
+            glitch_line(" Entity resisting... Increasing power... ", glitch_prob=0.3)
+            glitch_line(" Reality distortion detected... Stabilizing field... ", glitch_prob=0.25)
+            glitch_line(" Paranormal interference... Adjusting parameters... ", glitch_prob=0.3)
+            glitch_line(" Energy surge detected... Redirecting flow... ", glitch_prob=0.2)
+            glitch_line(" Entity attempting to escape... Containment protocols engaged... ", glitch_prob=0.35)
+            glitch_line(" Signal corruption detected... Recalibrating frequencies... ", glitch_prob=0.3)
+            glitch_line(" Dimensional rift detected... Sealing breach... ", glitch_prob=0.4)
+            glitch_line(" Entity's resistance intensifies... Increasing output... ", glitch_prob=0.3)
+            glitch_line(" Temporal anomaly detected... Synchronizing time flow... ", glitch_prob=0.25)
+            glitch_line(" Entity's presence destabilizing... Reinforcing barriers... ", glitch_prob=0.3)
+            glitch_line(" Unknown energy signature detected... Analyzing... ", glitch_prob=0.2)
+            glitch_line(" Entity attempting to corrupt system... Activating failsafe... ", glitch_prob=0.35)
+
+            # Losowy wynik dla każdej próby
+            success = random.random() > 0.7  # 30% szans na sukces w każdej próbie
+            if success:
+                slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
+                glitch_line(" Entity banished successfully! ", glitch_prob=0.4)
+                slow_print(Fore.MAGENTA + narrative)
+                break  # Przerwij pętlę, gdy egzorcyzm się powiedzie
+            else:
+                slow_print(Fore.RED + " Exorcism failed! Retrying... ")
+
+        # Zakończenie
+        slow_print(generate_footer())
 
 class tr:
     def __init__(self):
@@ -202,6 +275,7 @@ class tr:
             "exit": self.exit_tr,
             "open_en": Encyclopedia().menu,
             "login": self.login,
+            "exorcism": trCommands.exorcism,
         }
 
     def start(self):
@@ -227,13 +301,11 @@ class tr:
         +-------------------------------------------------------------+
         |                       Available Commands                    |
         +-------------------------------------------------------------+
-        | scan    : Perform a scan of the surrounding area.           |
-        | hack    : Attempt to hack into a system.                    |
         | decrypt : Decrypt secure messages                           |
         | help    : Display this help information.                    |
         | login   : Open login menu.                                  |  
         | open_en : Access the encyclopedia.                          |
-        | exit    : Exit the Terminal.                                |                                         |
+        | exit    : Exit the Terminal.                                |                                         
         +-------------------------------------------------------------+
         """
         slow_print(help_text)

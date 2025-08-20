@@ -1,53 +1,43 @@
 {
     "histories": [
-      {
-        "title": "Wędrówka po Ziemiach Jałowych",
-        "summary": "Grupa ocalonych, składająca się z ludzi z różnych frakcji, wyrusza na niebezpieczną wyprawę przez Ziemie Jałowe. Ich celem jest odnalezienie źródeł wody, które mogłyby uratować resztki ich osady. Wyruszają z obozu Przymierza, z nadzieją, że uda im się przetrwać wśród skażonych, martwych ziem. Ziemie, które kiedyś były bogate w zasoby, teraz są jedynie pustkowiem pełnym radioaktywnych zgliszczy, a każde podejmowane ryzyko może być ich ostatnim. Podróż wymaga przetrwania nie tylko w brutalnych warunkach, ale także stawienia czoła nieznanym zagrożeniom. Z każdą mijającą godziną, morale spada, a nieufność między członkami grupy narasta. Nikt nie może być pewny, czy celem wyprawy jest rzeczywiście ratunek, czy może znalezienie własnej drogi do władzy, gdy reszta grupy zginie.",
-        "date": "2124-09-15",
-        "location": "Pustkowia Północne",
-        "persons": ["Lena", "Gorak", "Marek"],
-        "category": "Przetrwanie"
-      },
-      {
-        "title": "Zatruty Ogród",
-        "summary": "Grupa eksploratorów, w tym były naukowiec Dr. Aiko, odkrywa starożytną oazę, która niegdyś była symbolem życia w tej apokaliptycznej erze. Wierzyli, że w tym miejscu znajdą odpowiedzi na tajemnice, które dręczyły ich przez całe życie – czy ludzkość jest w stanie odbudować cywilizację, czy skazana jest na zagładę? Jednak to, co miało być zbawieniem, okazuje się pułapką. Oaza, pełna kwitnącej roślinności, jest podstępem. Pod powierzchnią ziemi znajdują się niezidentyfikowane źródła promieniowania, które sprawiają, że każdy, kto spożywa wodę z tego miejsca, umiera w męczarniach. Ogród, będący kiedyś symbolem nadziei, teraz stał się symbolem śmierci i zdrady. Rozpoczyna się walka o przetrwanie, gdy grupa odkrywa, że byli ścigani przez inne frakcje, które wiedziały o tajemnicy ogrodu i chciały wykorzystać go do własnych celów.",
-        "date": "2130-03-22",
-        "location": "Oaza Rzeki Kaldor",
-        "persons": ["Dr. Aiko", "Marcus W.", "Khan"],
-        "category": "Tajemnice"
-      },
-      {
-        "title": "Bunt w Obozie Przymierza",
-        "summary": "W Obozie Przymierza, na którego czele stoi charyzmatyczny lider Zaraf, panuje pozorna harmonia. Jednak napięcia między różnymi frakcjami zaczynają sięgać zenitu. W obozie rządzi strach przed brakiem zapasów, a każda decyzja, dotycząca przydzielania wody czy jedzenia, prowadzi do coraz większych konfliktów. Grupa pod przewodnictwem Eleny domaga się większej ilości zasobów, twierdząc, że obecna sytuacja jest wynikiem niekompetencji liderów. Z kolei inna frakcja pod wodzą Hassana oskarża Elenę o zdradę i chęć przejęcia władzy. Bunt wybucha w najgorszym możliwym momencie: po uderzeniu burzy piaskowej, która zniszczyła część zapasów. Z każdą godziną walka staje się coraz bardziej brutalna, a ostatecznie obozowi grozi całkowita zagłada. W chaosie buntu, jedna z frakcji odkrywa, że nie tylko zasoby są cenne – pojawia się tajemniczy artefakt, który może zmienić równowagę sił w całej Ziemi Jałowej.",
-        "date": "2129-07-09",
-        "location": "Oboz Przymierza, Wschodnie Wybrzeże",
-        "persons": ["Zaraf", "Elena", "Hassan"],
-        "category": "Walka o zasoby"
-      },
-      {
-        "title": "Ewakuacja Kolonii Omega",
-        "summary": "Kolonia Omega, która była jednym z ostatnich bezpiecznych bastionów ludzkości, staje w obliczu nieuchronnej zagłady. Ziemia wokół kolonii została dotknięta burzami piaskowymi, a poziom promieniowania wzrósł do niebezpiecznego poziomu. Władze kolonii podjęły dramatyczną decyzję o ewakuacji, jednak nie wszyscy mogli opuścić to miejsce. W obozie przygotowań do ewakuacji, Karla, liderka jednej z grup, zaczyna podejrzewać, że decyzje o ewakuacji mogą być częścią spisku. Czy to naprawdę konieczność, czy może ktoś chce wykorzystać sytuację do przejęcia władzy nad ostatnimi zasobami? W miarę jak czas ucieka, grupa ocalonych staje przed wyborem: podjąć ryzyko i opuścić kolonię, czy walczyć o to, co pozostało, i stawić czoła śmierci na tych ziemiach?",
-        "date": "2132-11-03",
-        "location": "Kolonia Omega, Południowe Tereny",
-        "persons": ["Karla", "Bram", "Zane"],
-        "category": "Ewakuacja"
-      },
-      {
-        "title": "Tajemnica Zrujnowanego Miasta",
-        "summary": "Eksploratorzy, którzy od lat poszukiwali śladów przedwojennej cywilizacji, w końcu trafiają do Zrujnowanego Miasta Gellmar. Miejsce to, zrujnowane w wyniku poprzednich wojen i katastrof, miało być jednym z najpotężniejszych ośrodków technologicznych przed upadkiem. Wśród ruin, odkrywają nieznane technologie, które mogą stanowić klucz do przeżycia w Ziemiach Jałowych. Jednak w miarę jak zbliżają się do centrum miasta, zaczynają dostrzegać niepokojące znaki: pozostałości po dawnych mieszkańcach miasta, dziwne ruiny, które zmieniają kształt w zależności od kąta patrzenia, i tajemnicze zjawiska elektromagnetyczne. Co ukrywa to miasto? Czy naprawdę zniszczyły je wojny, czy może coś znacznie gorszego zniszczyło całą ludzkość? Tajemnice tego miejsca mogą zmienić wszystko, ale koszt odkrycia prawdy może być wyższy, niż ktokolwiek się spodziewa.",
-        "date": "2131-02-18",
-        "location": "Ruiny Miasta Gellmar",
-        "persons": ["Rafi", "Amira", "Jarek"],
-        "category": "Tajemnice"
-      },
-      {
-        "title": "Ostatnia Walka o Tereny Zapasów",
-        "summary": "W świecie, gdzie zasoby są na wagę życia, każda bitwa o zapasy może okazać się decydująca. W Pustkowiach Zachodnich dwie grupy ocalonych, które stoczyły już setki małych bitew o wodę, broń i żywność, stają w walce o coś, co może zapewnić im przewagę: magazyn z bronią, który nie został jeszcze rozkradziony. Ragnar, przywódca jednej z grup, wie, że jeśli nie przejmą zapasów, ich obozowi grozi zagłada. Vera, jego rywalka z drugiej grupy, wie, że walka o broń to nie tylko kwestia przetrwania – to szansa na zdobycie władzy nad resztą Ziemi Jałowej. Kiedy zaczyna się walka, nie ma miejsca na honor – tylko brutalna siła i determinacja mogą zdecydować o przyszłości tego terytorium.",
-        "date": "2133-06-27",
-        "location": "Pustkowie Zachodnie",
-        "persons": ["Ragnar", "Vera", "Takeda"],
-        "category": "Walka"
-      }
+        {
+            "entry_id": "123456",
+            "title": "W\u0119dr\u00f3wka po Ziemiach Ja\u0142owych",
+            "summary": "Grupa ocalonych, sk\u0142adaj\u0105ca si\u0119 z ludzi z r\u00f3\u017cnych frakcji, wyrusza na niebezpieczn\u0105 wypraw\u0119 przez Ziemie Ja\u0142owe...",
+            "date": "2124-09-15",
+            "location": "Pustkowia P\u00f3\u0142nocne",
+            "persons": [
+                "Lena",
+                "Gorak",
+                "Marek"
+            ],
+            "category": "Przetrwanie"
+        },
+        {
+            "entry_id": "654321",
+            "title": "Zatruty Ogr\u00f3d",
+            "summary": "Grupa eksplorator\u00f3w, w tym by\u0142y naukowiec Dr. Aiko, odkrywa staro\u017cytn\u0105 oaz\u0119...",
+            "date": "2130-03-22",
+            "location": "Oaza Rzeki Kaldor",
+            "persons": [
+                "Dr. Aiko",
+                "Marcus W.",
+                "Khan"
+            ],
+            "category": "Tajemnice"
+        },
+        {
+            "entry_id": "973806",
+            "title": "x",
+            "summary": "x",
+            "date": "x",
+            "location": "x",
+            "persons": [
+                "x",
+                "xx",
+                "yy"
+            ],
+            "category": "xxx"
+        }
     ]
-  }
-  
+}

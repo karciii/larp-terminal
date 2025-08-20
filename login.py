@@ -80,13 +80,10 @@ class Login:
         slow_print(Fore.GREEN + f"Editing notes for {username}.")
         glitch_line("Notes opened for modification.")
 
-    def access_logs(self):
+    def access_logs(self, username):
         slow_print(Fore.GREEN + "Accessing logs.")
         glitch_line("Logs accessed.")
 
-    def arm_rocket(self):
-        slow_print(Fore.RED + "Arming rocket...")
-        glitch_line("Rocket armed.")
 
     def handle_option(self, option, username):
         options = {
@@ -94,12 +91,10 @@ class Login:
             "logs": self.access_logs,
             "encrypt": self.encrypt_message,
             "decrypt": self.decrypt_message,
-            "encryption_logs": self.show_encryption_logs,
-            "arm_rocket": self.arm_rocket,
             "edit_notes": self.edit_notes,
             "help": self.show_help,
             "exit": self.handle_exit,
-            "open_jr": self.journal_menu
+            "db": self.journal_menu
         }
 
         if option in options:
@@ -114,12 +109,10 @@ class Login:
         +-------------------------------------------------------------+
         | ascii          : Zobacz ASCII art                           |
         | logs           : Otwórz Logi                                |
+        | db             : Baza Danych                                |
         | encrypt        : Zaszyfruj Wiadomość                        |
         | decrypt        : Odszyfruj Wiadomość                        |
-        | encryption_logs: Zobacz logi enkrypcji                      |
-        | arm_rocket     : Uzbrój rakietę                             |
         | edit_notes     : Edytuj Notatki                             |
-        | open_jr        : Access and manage your journal entries.    |
         | help           : Display this help information              |
         | exit           : Exit the menu                              |
         +-------------------------------------------------------------+
@@ -129,14 +122,10 @@ class Login:
     def show_ascii_art(self, username=None):
         slow_print(Fore.GREEN + "Zobacz ASCII art")
 
-    def show_encryption_logs(self, username=None):
-        slow_print(Fore.GREEN + "Zobacz logi enkrypcji")
-
-
     def journal_menu(self, username):
         # Access the journal menu.
         journal = Journal()
-        journal.journal_menu()
+        journal.journal_menu(username)
 
     def check_inactivity(self):
         if time.time() - self.last_activity_time > 300:  # 5 minut w sekundach

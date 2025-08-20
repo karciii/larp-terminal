@@ -98,7 +98,7 @@ class Encyclopedia:
         except FileNotFoundError:
             slow_print("The encyclopedia data file was not found.")
         except json.JSONDecodeError:
-        slow_print("Error decoding the encyclopedia data file.")
+            slow_print("Error decoding the encyclopedia data file.")
 
     def highlight_text(self, text, keyword):
         """Highlights the keyword in the given text."""
