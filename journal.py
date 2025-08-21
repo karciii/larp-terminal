@@ -44,6 +44,7 @@ class Journal:
         
         # # Adjust volume to maintain a consistent robotic feel
         # self.tts_engine.setProperty('volume', 0.9)  # Volume at 90%
+        pass
 
     def speak_text(self, text):
         """Cross-platform minimal TTS: espeak on Linux, PowerShell on Windows, else print."""
@@ -55,7 +56,12 @@ class Journal:
         elif self._tts_backend == "powershell":
             # prosty PowerShell TTS (Windows) — optional
             try:
-                ps_cmd = f"Add-Type –AssemblyName System.speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text.replace(\"'\",\"\\''")}')"
+                # escape single quotes for PowerShell single-quoted string by doubling them
+                ps_text = text.replace("'", "''")
+                ps_cmd = (
+                    "Add-Type -AssemblyName System.speech; "
+                    f"(New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{ps_text}')"
+                )
                 subprocess.run(["powershell", "-Command", ps_cmd], check=False)
             except Exception:
                 slow_print(Fore.CYAN + text)
