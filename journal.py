@@ -165,7 +165,7 @@ class Journal:
             entry = next((entry for entry in self.entries["histories"] if entry["entry_id"] == entry_id), None)
 
             if entry:
-                self.speak_text(f"Title: {entry['title']}, Date: {entry['date']}, Location: {entry['location']}, Summary: {entry['summary']}.")
+                # self.speak_text(f"Title: {entry['title']}, Date: {entry['date']}, Location: {entry['location']}, Summary: {entry['summary']}.")
                 slow_print(Fore.CYAN + f"\nTitle: {entry['title']}\n" +
                            f"Date: {entry['date']}\nLocation: {entry['location']}\n" +
                            f"Category: {entry['category']}\n" +
