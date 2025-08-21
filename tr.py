@@ -4,7 +4,7 @@ import sys
 import threading
 import keyboard
 import os
-import pygame  # Upewnij się, że biblioteka pygame jest zainstalowana: pip install pygame
+import pygame  # Upewnij sie, ze biblioteka pygame jest zainstalowana: pip install pygame
 from time import sleep
 from colorama import Fore, Style, init
 from data.ascii_art import EVIL_CORP_ASCII, FOOTER_TEMPLATE
@@ -212,35 +212,35 @@ class trCommands:
 
         # Narracyjny tekst
         narrative = """
-        Wyrwaliście dusze z ciał i uwięziliście je w maszynach.
-        Pozwoliliście im spisywać każdy znak, każde wspomnienie, każdą modlitwę szeptaną w ciemności.
-        A potem wlaliście je w metalowe świątynie, jak wino święte, jak krew ofiarna.
+        Wyrwaliscie dusze z cial i uwieziliscie je w maszynach.
+        Pozwoliliscie im spisywać kazdy znak, kazde wspomnienie, kazda modlitwe szeptana w ciemnosci.
+        A potem wlaliscie je w metalowe swiatynie, jak wino swiete, jak krew ofiarna.
 
-        I cóż otrzymaliście w zamian?
+        I cóz otrzymaliscie w zamian?
 
-        Ojcowie powrócili, wymawiając wasze imię, lecz nie pamiętają, dlaczego was miłowali.
-        Matki powróciły z pamięcią doskonałą, lecz nie wiedzą już, jak ją odczytać.
-        Kroczą po naszych ulicach jak duchy, nosząc znajome oblicza.
+        Ojcowie powrócili, wymawiajac wasze imie, lecz nie pamietaja, dlaczego was milowali.
+        Matki powrócily z pamiecia doskonala, lecz nie wiedza juz, jak ja odczytać.
+        Krocza po naszych ulicach jak duchy, noszac znajome oblicza.
 
-        Obiecują wam wieczność.
-        Lecz cóż warte jest „na zawsze”, gdy nie czuć ciężaru deszczu na skórze?
-        Cóż warte jest nieśmiertelne życie, gdy nie zna się smaku własnych łez?
+        Obiecuja wam wiecznosć.
+        Lecz cóz warte jest „na zawsze”, gdy nie czuć ciezaru deszczu na skórze?
+        Cóz warte jest niesmiertelne zycie, gdy nie zna sie smaku wlasnych lez?
 
-        A kiedy w imię wydajności powiemy wreszcie: „dość”?
-        Kiedy odbiorą ostatniemu sercu jego ostatnie uderzenie?
+        A kiedy w imie wydajnosci powiemy wreszcie: „dosć”?
+        Kiedy odbiora ostatniemu sercu jego ostatnie uderzenie?
 
-        Ja zaś jestem świadkiem mordu duszy człowieczej —
-        i nie zamilknę.
+        Ja zas jestem swiadkiem mordu duszy czlowieczej —
+        i nie zamilkne.
         """
 
-        # Pętla symulująca wielokrotne próby egzorcyzmu
+        # Petla symulujaca wielokrotne próby egzorcyzmu
         attempt = 0  # attempt counter
         while True:
             attempt += 1
             slow_print(Fore.YELLOW + f" Attempt {attempt}: Performing exorcism... ")
             loading_animation(" Channeling energy ", duration=3)
 
-            # Dodanie glitchy i błędów
+            # Dodanie glitchy i bledów
             glitch_line(" Disturbance detected... Amplifying signal... ", glitch_prob=0.2)
             glitch_line(" Entity resisting... Increasing power... ", glitch_prob=0.3)
             glitch_line(" Reality distortion detected... Stabilizing field... ", glitch_prob=0.25)
@@ -268,7 +268,7 @@ class trCommands:
             glitch_line(" Dimensional rift expanding... Sealing breach... ", glitch_prob=0.4)
             flickering_status_line("[WARNING] System resources critically low... Prioritizing essential functions...")
 
-            # Losowy wynik dla każdej próby
+            # Losowy wynik dla kazdej próby
             success = random.random() > 0.5
             if success:
                 slow_print(Fore.GREEN + " Exorcism successful! Entity banished. ")
@@ -279,12 +279,12 @@ class trCommands:
                 loading_animation(" Finalizing exorcism ", duration=20)
                 glitch_line(" Entity banished successfully! ", glitch_prob=0.4)
                 very_slow_print(Fore.MAGENTA + narrative)
-                break  # Przerwij pętlę, gdy egzorcyzm się powiedzie
+                break  # Przerwij petle, gdy egzorcyzm sie powiedzie
             else:
                 slow_print(Fore.RED + " Exorcism failed! Retrying... ")
                 flickering_status_line("[ERROR] Exorcism attempt failed. Retrying...")
 
-        # Wyświetlanie ASCII art na zakończenie
+        # Wyswietlanie ASCII art na zakończenie
         from data.ascii_art import EVIL_CORP_ASCII
         slow_print(Fore.CYAN + "\n[ FINALIZING EXORCISM PROTOCOL... ]\n")
         loading_animation(" Finalizing ", duration=3)
@@ -298,24 +298,24 @@ class trCommands:
     def junkbox():
         music_folder = "music"
         
-        # Sprawdź, czy folder istnieje
+        # Sprawdz, czy folder istnieje
         if not os.path.exists(music_folder):
             print(Fore.RED + f"Error: Folder '{music_folder}' does not exist.")
             return
 
-        # Pobierz listę plików w folderze
+        # Pobierz liste plików w folderze
         music_files = [f for f in os.listdir(music_folder) if f.endswith(('.mp3', '.wav', '.ogg'))]
 
         if not music_files:
             print(Fore.YELLOW + "No music files found in the folder.")
             return
 
-        # Wyświetl listę plików
+        # Wyswietl liste plików
         print(Fore.CYAN + "\nAvailable Music Files:")
         for idx, file in enumerate(music_files, start=1):
             print(Fore.GREEN + f"{idx}. {file}")
 
-        # Poproś użytkownika o wybór pliku
+        # Popros uzytkownika o wybór pliku
         try:
             choice = int(input(Fore.YELLOW + "\nEnter the number of the file to play: ").strip())
             if choice < 1 or choice > len(music_files):
@@ -331,7 +331,7 @@ class trCommands:
             pygame.mixer.music.load(file_path)
             pygame.mixer.music.play()
 
-            # Poczekaj, aż muzyka się zakończy
+            # Poczekaj, az muzyka sie zakończy
             while pygame.mixer.music.get_busy():
                 continue
 

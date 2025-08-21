@@ -12,7 +12,7 @@ import random
 class Login:
     def __init__(self):
         self.user_manager = UserManager()
-        self.last_activity_time = time.time()  # Czas ostatniej aktywności
+        self.last_activity_time = time.time()  # Czas ostatniej aktywnosci
 
     def login_menu(self):
         username = input(Fore.YELLOW + "Username: ").strip()
@@ -48,30 +48,30 @@ class Login:
         user_level = self.user_manager.users[username]['access_level']
         slow_print(Fore.GREEN + f"Welcome {username}, Access Level: {user_level}")
 
-        # Opcje dostępne dla różnych poziomów dostępu
+        # Opcje dostepne dla róznych poziomów dostepu
         options = {
             "ascii": "Zobacz ASCII art",
             "logs": "Otwórz Logi",
-            "encrypt": "Zaszyfruj Wiadomość",
-            "decrypt": "Odszyfruj Wiadomość",
+            "encrypt": "Zaszyfruj Wiadomosć",
+            "decrypt": "Odszyfruj Wiadomosć",
             "edit_notes": "Edytuj Notatki",
             "help": "Display this help information",
             "exit": "Exit the menu",
             "db": "Baza Danych"
         }
 
-        # Ograniczenia dostępu w zależności od poziomu użytkownika
+        # Ograniczenia dostepu w zaleznosci od poziomu uzytkownika
         if user_level == 2:
             allowed_options = {"ascii", "logs", "exit"}
         elif user_level == 8:  # Admin
             allowed_options = set(options.keys())
         else:
-            allowed_options = {"help", "exit"}  # Domyślne opcje dla innych poziomów
+            allowed_options = {"help", "exit"}  # Domyslne opcje dla innych poziomów
 
         while True:
             self.check_inactivity()  # Check if user has been inactive for 5 minutes
 
-            # Wyświetl dostępne opcje
+            # Wyswietl dostepne opcje
             slow_print(Fore.YELLOW + "Type 'help' to see available options.")
             # for option, description in options.items():
             #     if option in allowed_options:
@@ -81,7 +81,7 @@ class Login:
             self.handle_option(choice, username)
 
     def xor_encrypt(self, message):
-        key = 'secret_key'  # Możesz zmienić klucz na dowolny ciąg znaków
+        key = 'secret_key'  # Mozesz zmienić klucz na dowolny ciag znaków
         encrypted_message = ''.join(chr(ord(c) ^ ord(key[i % len(key)])) for i, c in enumerate(message))
         return encrypted_message
 
@@ -96,7 +96,7 @@ class Login:
         encoded_message = input(Fore.YELLOW + "Enter the encrypted message: ").strip()
         try:
             encrypted_message = base64.b64decode(encoded_message.encode()).decode()  # Dekodowanie Base64
-            decrypted_message = self.xor_encrypt(encrypted_message)  # Użyj tej samej metody do deszyfrowania
+            decrypted_message = self.xor_encrypt(encrypted_message)  # Uzyj tej samej metody do deszyfrowania
             slow_print(Fore.GREEN + f"Decrypted Message: {decrypted_message}")
             self.user_manager.log_operation(username, "Decryption", len(encoded_message))
         except Exception as e:
@@ -110,7 +110,7 @@ class Login:
         slow_print(Fore.GREEN + "Accessing logs...")
         glitch_line("Logs accessed.")
 
-        # Lista losowych komunikatów do wyświetlenia
+        # Lista losowych komunikatów do wyswietlenia
         random_logs = [
             "User authentication successful.",
             "System diagnostics completed.",
@@ -126,21 +126,21 @@ class Login:
             "Critical error: Memory overflow detected."
         ]
 
-        # Wyświetl losowe komunikaty przez kilka sekund
+        # Wyswietl losowe komunikaty przez kilka sekund
         start_time = time.time()
-        while time.time() - start_time < 5:  # Wyświetlaj przez 5 sekund
+        while time.time() - start_time < 5:  # Wyswietlaj przez 5 sekund
             log = random.choice(random_logs)
             slow_print(Fore.YELLOW + log)
-            time.sleep(0.5)  # Odstęp między komunikatami
+            time.sleep(0.5)  # Odstep miedzy komunikatami
 
         # Odczyt logów z pliku crypto_logs.json
         try:
             file_path = "data/crypto_logs.json"
             with open(file_path, "r", encoding="utf-8") as file:
-                logs = file.readlines()  # Wczytaj logi jako listę wierszy
+                logs = file.readlines()  # Wczytaj logi jako liste wierszy
 
             slow_print(Fore.CYAN + "\nCrypto Logs:")
-            for log in logs[-10:]:  # Wyświetl ostatnie 10 logów
+            for log in logs[-10:]:  # Wyswietl ostatnie 10 logów
                 slow_print(Fore.WHITE + log.strip())
 
         except FileNotFoundError:
@@ -151,7 +151,7 @@ class Login:
     def handle_option(self, option, username):
         user_level = self.user_manager.users[username]['access_level']
 
-        # Opcje dostępne dla wszystkich poziomów dostępu
+        # Opcje dostepne dla wszystkich poziomów dostepu
         options = {
             "ascii": (self.show_ascii_art, 2),
             "logs": (self.access_logs, 2),
@@ -175,19 +175,19 @@ class Login:
     def show_help(self, username=None):
         user_level = self.user_manager.users[username]['access_level']
 
-        # Opcje dostępne dla wszystkich poziomów dostępu
+        # Opcje dostepne dla wszystkich poziomów dostepu
         options = {
             "ascii": ("Zobacz ASCII art", 2),
             "logs": ("Otwórz Logi", 2),
-            "encrypt": ("Zaszyfruj Wiadomość", 5),
-            "decrypt": ("Odszyfruj Wiadomość", 5),
+            "encrypt": ("Zaszyfruj Wiadomosć", 5),
+            "decrypt": ("Odszyfruj Wiadomosć", 5),
             "edit_notes": ("Edytuj Notatki", 8),
             "db": ("Baza Danych", 5),
             "help": ("Display this help information", 1),
             "exit": ("Exit the menu", 1),
         }
 
-        # Filtrowanie opcji na podstawie poziomu dostępu
+        # Filtrowanie opcji na podstawie poziomu dostepu
         help_text = """
         +-------------------------------------------------------------+
         |                       Available Commands                    |
@@ -202,17 +202,17 @@ class Login:
 
     def show_ascii_art(self, username=None):
         try:
-            # Ścieżka do pliku z grafikami
+            # sciezka do pliku z grafikami
             file_path = "data/baby_art.txt"
 
-            # Wczytaj zawartość pliku i podziel na grafiki
+            # Wczytaj zawartosć pliku i podziel na grafiki
             with open(file_path, "r", encoding="utf-8") as file:
                 art_sections = file.read().split("--splitter--")
 
-            # Wyświetl losowe grafiki
+            # Wyswietl losowe grafiki
             while True:
-                random_art = random.choice(art_sections)  # Wybierz losową grafikę
-                slow_print(Fore.GREEN + random_art.strip())  # Wyświetl grafikę
+                random_art = random.choice(art_sections)  # Wybierz losowa grafike
+                slow_print(Fore.GREEN + random_art.strip())  # Wyswietl grafike
                 user_input = input(Fore.YELLOW + "Press Enter to see another art or type 'exit' to return: ").strip().lower()
                 if user_input == "exit":
                     break
@@ -228,9 +228,9 @@ class Login:
         journal.journal_menu(username)
 
     def check_inactivity(self):
-        """Sprawdza, czy użytkownik był nieaktywny przez 5 minut."""
+        """Sprawdza, czy uzytkownik byl nieaktywny przez 5 minut."""
         current_time = time.time()
-        inactivity_limit = 5 * 60  # 5 minut w sekundach
+        inactivity_limit = 9999999999999999 # 5 minut w sekundach
 
         if current_time - self.last_activity_time > inactivity_limit:
             slow_print(Fore.RED + "Session timed out due to inactivity.")
@@ -239,7 +239,7 @@ class Login:
 
     def handle_exit(self):
         slow_print(Fore.YELLOW + "Exiting...")
-        self.last_activity_time = time.time()  # Resetuj licznik aktywności
+        self.last_activity_time = time.time()  # Resetuj licznik aktywnosci
         self.boot_sequence()
 
     def boot_sequence(self):

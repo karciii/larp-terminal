@@ -74,14 +74,14 @@ class Journal:
             +----------------------------------------------------------+
             |                       Journal Menu                       |
             +----------------------------------------------------------+
-            | open: Przeglądaj istniejące wpisy w dzienniku.           |
+            | open: Przegladaj istniejace wpisy w dzienniku.           |
             | enter: Dodaj nowy wpis do dziennika (tylko admin).       |
-            | exit: Powrót do menu głównego.                          |
+            | exit: Powrót do menu glównego.                          |
             +----------------------------------------------------------+    
             '''
             slow_print(Fore.CYAN + journal_menu)
 
-            choice = input(Fore.GREEN + "Wybierz opcję: ").strip().lower()
+            choice = input(Fore.GREEN + "Wybierz opcje: ").strip().lower()
 
             if choice == "open":
                 self.view_entries()
@@ -115,7 +115,7 @@ class Journal:
 
     def add_entry(self, username):
         """Adds a new entry to the journal."""
-        # Sprawdź, czy użytkownik ma uprawnienia administratora
+        # Sprawdz, czy uzytkownik ma uprawnienia administratora
         if username != "admin":
             slow_print(Fore.RED + "Only the admin can add new journal entries.")
             return

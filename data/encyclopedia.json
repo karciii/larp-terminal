@@ -1,44 +1,44 @@
 {
     "lokacje": {
         "Miasto Lud": {
-            "opis": "Zrujnowane miasto, rządzone strachem, podzielone między różne frakcje. Echo starożytnej technologii wciąż nawiedza jego ulice, a wśród ruin skrywają się sekrety, które mogą zmienić losy tego świata.",
+            "opis": "Zrujnowane miasto, rzadzone strachem, podzielone miedzy rózne frakcje. Echo starozytnej technologii wciaz nawiedza jego ulice, a wsród ruin skrywaja sie sekrety, które moga zmienić losy tego swiata.",
             "wyjatkowe_cechy": [
-                "Most Bogów - rozpadający się, niebezpieczny most łączący ruiny.",
-                "Linia Bębnów - wieczna kakofonia maszyn, które nieustannie tłuką rytm zniszczenia."
+                "Most Bogów - rozpadajacy sie, niebezpieczny most laczacy ruiny.",
+                "Linia Bebnów - wieczna kakofonia maszyn, które nieustannie tluka rytm zniszczenia."
             ],
             "mieszkańcy": [
-                "Szarosci - militarystyczna frakcja, która stara się utrzymać porządek, nie zważając na brutalność.",
-                "Pubiani - chaotyczni złomiarze żyjący w ruinach, nie dbający o nic oprócz przetrwania.",
-                "Czernie - niewielka, sekciarska grupa wierząca w moc starożytnych maszyn, dążąca do ich ponownego uruchomienia."
+                "Szarosci - militarystyczna frakcja, która stara sie utrzymać porzadek, nie zwazajac na brutalnosć.",
+                "Pubiani - chaotyczni zlomiarze zyjacy w ruinach, nie dbajacy o nic oprócz przetrwania.",
+                "Czernie - niewielka, sekciarska grupa wierzaca w moc starozytnych maszyn, dazaca do ich ponownego uruchomienia."
             ]
         },
         "Wioska Dogan": {
-            "opis": "Opustoszałe miasteczko pełne dziwacznych maszyn i zapomnianych eksperymentów. Krążą plotki o żyjących maszynach, które mogą być ostatnią nadzieją na ocalenie ludzkości lub jej całkowite zniszczenie.",
+            "opis": "Opustoszale miasteczko pelne dziwacznych maszyn i zapomnianych eksperymentów. Kraza plotki o zyjacych maszynach, które moga być ostatnia nadzieja na ocalenie ludzkosci lub jej calkowite zniszczenie.",
             "wyjatkowe_cechy": [
-                "Wieża Obserwacyjna - zrujnowana konstrukcja z panoramicznym widokiem na pustkowie.",
-                "Żelazna Katedra - opuszczona fabryka przerobiona na miejsce kultu, gdzie odprawiane są tajemnicze rytuały."
+                "Wieza Obserwacyjna - zrujnowana konstrukcja z panoramicznym widokiem na pustkowie.",
+                "zelazna Katedra - opuszczona fabryka przerobiona na miejsce kultu, gdzie odprawiane sa tajemnicze rytualy."
             ],
             "mieszkańcy": [
-                "Wędrowcy Cieni - nomadzi, którzy omijają miasto, twierdząc, że jest przeklęte.",
-                "Złomowi Kapłani - fanatycy czczący starożytne maszyny, wierzący w ich moc.",
-                "Wielkie Białe - tajemnicza frakcja zamieszkująca ruiny, nieznana innym."
+                "Wedrowcy Cieni - nomadzi, którzy omijaja miasto, twierdzac, ze jest przeklete.",
+                "Zlomowi Kaplani - fanatycy czczacy starozytne maszyny, wierzacy w ich moc.",
+                "Wielkie Biale - tajemnicza frakcja zamieszkujaca ruiny, nieznana innym."
             ]
         },
-        "Pustkowie Ziem Jałowych": {
-            "opis": "Obszar porzucony przez ludzi, zdominowany przez potworne zjawiska i przerażające ruiny dawnych cywilizacji. W tym miejscu nie ma już niczego poza pustką i zniszczeniem.",
+        "Pustkowie Ziem Jalowych": {
+            "opis": "Obszar porzucony przez ludzi, zdominowany przez potworne zjawiska i przerazajace ruiny dawnych cywilizacji. W tym miejscu nie ma juz niczego poza pustka i zniszczeniem.",
             "wyjatkowe_cechy": [
-                "Tajemnicza Pustynia - piaski, które pochłaniają wszystko, co na nich stanie, nie zostawiając po sobie żadnych śladów.",
-                "Ruiny Ostatniej Twierdzy - miejsce, gdzie kiedyś odbywały się kluczowe walki o przetrwanie, teraz tylko gruz i zapomniane nadzieje."
+                "Tajemnicza Pustynia - piaski, które pochlaniaja wszystko, co na nich stanie, nie zostawiajac po sobie zadnych sladów.",
+                "Ruiny Ostatniej Twierdzy - miejsce, gdzie kiedys odbywaly sie kluczowe walki o przetrwanie, teraz tylko gruz i zapomniane nadzieje."
             ],
             "mieszkańcy": [
-                "Pustkowcy - ludzie żyjący w ekstremalnych warunkach, często organizujący brutalne rajdy na inne osady.",
-                "Bestie - nieznane, groźne istoty, które pojawiły się po upadku cywilizacji, przerażające i nieokiełznane."
+                "Pustkowcy - ludzie zyjacy w ekstremalnych warunkach, czesto organizujacy brutalne rajdy na inne osady.",
+                "Bestie - nieznane, grozne istoty, które pojawily sie po upadku cywilizacji, przerazajace i nieokielznane."
             ]
         }
     },
     "frakcje": {
         "Rewolwerowcy": {
-            "opis": "Zanikający porządek wojowników przysięgłych do obrony Wieży. Biegli w walce oraz dyplomacji, ich misją jest powstrzymanie chaosu i przywrócenie równowagi między światami.",
+            "opis": "Zanikajacy porzadek wojowników przysieglych do obrony Wiezy. Biegli w walce oraz dyplomacji, ich misja jest powstrzymanie chaosu i przywrócenie równowagi miedzy swiatami.",
             "kluczowe_postacie": [
                 "Roland Deschain",
                 "Eddie Dean",
@@ -47,7 +47,7 @@
             ]
         },
         "Niskie Ludzie": {
-            "opis": "Agenci Czerwonego Króla, którzy mają za zadanie zniszczenie Wieży i szerzenie chaosu na świecie. Ich celem jest zniszczenie ostatnich bastionów porządku.",
+            "opis": "Agenci Czerwonego Króla, którzy maja za zadanie zniszczenie Wiezy i szerzenie chaosu na swiecie. Ich celem jest zniszczenie ostatnich bastionów porzadku.",
             "kluczowe_postacie": [
                 "Czerwony Król",
                 "Randall Flagg",
@@ -55,15 +55,15 @@
             ]
         },
         "Bractwo Cieni": {
-            "opis": "Sekciarska grupa, której celem jest kontrolowanie wiedzy o starożytnych maszynach i technologii. Ich siła tkwi w tajemnicach, które skrywają przed światem.",
+            "opis": "Sekciarska grupa, której celem jest kontrolowanie wiedzy o starozytnych maszynach i technologii. Ich sila tkwi w tajemnicach, które skrywaja przed swiatem.",
             "kluczowe_postacie": [
                 "Zakonnik Enzo",
-                "Martyna Złomiarz",
+                "Martyna Zlomiarz",
                 "Mistrz Technologii Ared"
             ]
         },
         "Gibsonnicy": {
-            "opis": "Frakcja wyznawców Mela Gibsona, oddanych obrońców starego porządku. Ich kolorem jest niebieski, a ich celem jest przywrócenie dawnej świetności i dominacji.",
+            "opis": "Frakcja wyznawców Mela Gibsona, oddanych obrońców starego porzadku. Ich kolorem jest niebieski, a ich celem jest przywrócenie dawnej swietnosci i dominacji.",
             "kluczowe_postacie": [
                 "Gibson Król",
                 "Kapitanka Faith",
@@ -71,7 +71,7 @@
             ]
         },
         "Rocket Dogs": {
-            "opis": "Frakcja wyznawców Króla Rock and Rolla, poszukująca Lost Vegas. Ich misja to odbudowanie stolicy rozrywki i odzyskanie władzy nad zrujnowanym światem.",
+            "opis": "Frakcja wyznawców Króla Rock and Rolla, poszukujaca Lost Vegas. Ich misja to odbudowanie stolicy rozrywki i odzyskanie wladzy nad zrujnowanym swiatem.",
             "kluczowe_postacie": [
                 "Rocket King",
                 "Elvis Reborn",
@@ -79,7 +79,7 @@
             ]
         },
         "Atomic Rats": {
-            "opis": "Grupa przetrwańców żyjących w ruinach dawnej cywilizacji. Używają broni nuklearnej i innych przestarzałych technologii, by walczyć o przetrwanie w post-apokaliptycznym świecie.",
+            "opis": "Grupa przetrwańców zyjacych w ruinach dawnej cywilizacji. Uzywaja broni nuklearnej i innych przestarzalych technologii, by walczyć o przetrwanie w post-apokaliptycznym swiecie.",
             "kluczowe_postacie": [
                 "Nuklearna Królowa",
                 "Czarny Szczur",
@@ -87,39 +87,39 @@
             ]
         },
         "Manni": {
-            "opis": "Starodawna frakcja, która wyznaje filozofię przetrwania w najtrudniejszych warunkach. Manni to podróżnicy między wymiarami, którzy rozumieją równowagę pomiędzy życiem a śmiercią.",
+            "opis": "Starodawna frakcja, która wyznaje filozofie przetrwania w najtrudniejszych warunkach. Manni to podróznicy miedzy wymiarami, którzy rozumieja równowage pomiedzy zyciem a smiercia.",
             "kluczowe_postacie": [
                 "Zwiadowca Manni",
-                "Wielki Szał Manni",
+                "Wielki Szal Manni",
                 "Liderka Cieni"
             ]
         }
     },
     "wydarzenia": {
         "Upadek Lud": {
-            "opis": "Dramatyczny konflikt, który doprowadził do ruiny miasta. Walki pomiędzy frakcjami zakończyły się wyczerpaniem zasobów i totalnym zniszczeniem.",
+            "opis": "Dramatyczny konflikt, który doprowadzil do ruiny miasta. Walki pomiedzy frakcjami zakończyly sie wyczerpaniem zasobów i totalnym zniszczeniem.",
             "uczestnicy": [
                 "Szarosci",
                 "Pubiani"
             ],
-            "wynik": "Miasto zostało rozbite, żadna frakcja nie uzyskała pełnej dominacji, a ruiny pozostają pogrążone w chaosie."
+            "wynik": "Miasto zostalo rozbite, zadna frakcja nie uzyskala pelnej dominacji, a ruiny pozostaja pograzone w chaosie."
         },
         "Ostatni Rewolwerowiec": {
-            "opis": "Legendarna opowieść o podróży Rolanda ku Mrocznej Wieży. Przeżycia i śmierć na każdym kroku, wszystko po to, by uratować lub zniszczyć Wieżę.",
-            "wplyw": "Opowieść ta stała się inspiracją dla ocalałych, którzy wierzą, że mogą walczyć o lepszy świat."
+            "opis": "Legendarna opowiesć o podrózy Rolanda ku Mrocznej Wiezy. Przezycia i smierć na kazdym kroku, wszystko po to, by uratować lub zniszczyć Wieze.",
+            "wplyw": "Opowiesć ta stala sie inspiracja dla ocalalych, którzy wierza, ze moga walczyć o lepszy swiat."
         },
-        "Wielki Przełom": {
-            "opis": "Wydarzenie, które zapoczątkowało erę chaosu, gdy dawne siły technologiczne zostały uwolnione przez Czerwonego Króla.",
+        "Wielki Przelom": {
+            "opis": "Wydarzenie, które zapoczatkowalo ere chaosu, gdy dawne sily technologiczne zostaly uwolnione przez Czerwonego Króla.",
             "uczestnicy": [
                 "Rewolwerowcy",
                 "Niskie Ludzie",
                 "Bractwo Cieni"
             ],
-            "wynik": "Zniszczenie wielu miejsc na Ziemiach Jałowych i pojawienie się nowych, nieznanych potworów."
+            "wynik": "Zniszczenie wielu miejsc na Ziemiach Jalowych i pojawienie sie nowych, nieznanych potworów."
         },
-        "Początek Złomowania": {
-            "opis": "Moment, kiedy maszyneria zaczęła działać na własną rękę, wyrządzając nieodwracalne zniszczenia na ziemiach, które kiedyś były tętniącymi życiem miastami.",
-            "wplyw": "Zmieniono sposób, w jaki ludzie postrzegają technologie – strach i podziw stają się głównymi emocjami związanymi z przestarzałymi maszynami."
+        "Poczatek Zlomowania": {
+            "opis": "Moment, kiedy maszyneria zaczela dzialać na wlasna reke, wyrzadzajac nieodwracalne zniszczenia na ziemiach, które kiedys byly tetniacymi zyciem miastami.",
+            "wplyw": "Zmieniono sposób, w jaki ludzie postrzegaja technologie – strach i podziw staja sie glównymi emocjami zwiazanymi z przestarzalymi maszynami."
         }
     }
 }
