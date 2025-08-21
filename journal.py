@@ -3,7 +3,6 @@ import random
 # import pyttsx3
 from colorama import Fore
 from animations import slow_print, frame_effect
-import objc 
 import shutil
 import subprocess
 import sys
